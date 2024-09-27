@@ -12,46 +12,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
-const messages = ref([
-  {
-    name: 'Me',
-    text: ['Hey, how are you?'],
-    avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
-    isSent: true  // Sent message (aligned to right)
-  },
-  {
-    name: 'Martin Hnatko',
-    text: ['wassupski'],
-    avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-    isSent: false  // Received message (aligned to left)
-  },
-  {
-    name: 'Me',
-    text: ['All good here!'],
-    avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
-    isSent: true  // Sent message (aligned to right)
-  },
-  {
-    name: 'Martin Hnatko',
-    text: ['cusbusautobus'],
-    avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-    isSent: false  // Received message (aligned to left)
-  },
-  {
-    name: 'Me',
-    text: ['trapny si jak klinec'],
-    avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
-    isSent: true  // Sent message (aligned to right)
-  },
-  {
-    name: 'Martin Hnatko',
-    text: ['fuhafuha'],
-    avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-    isSent: false  // Received message (aligned to left)
-  },
-])
+interface Message {
+  name: string;
+  text: string[];
+  avatar: string;
+  isSent: boolean;
+}
+defineProps<{
+  messages: Message[]
+}>();
 
 </script>
 

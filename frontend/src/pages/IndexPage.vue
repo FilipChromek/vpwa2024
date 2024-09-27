@@ -1,20 +1,14 @@
 <template>
-  <q-page class="page-container">
-    <chat-component class="chat-section"/>
-  </q-page>
+  <div>
+
+  </div>
 </template>
 
 <script setup lang="ts">
-import ChatComponent from 'components/ChatComponent.vue';
 
-defineOptions({
-  name: 'IndexPage'
-});
 </script>
 
+
 <style scoped>
-.page-container {
-  display: flex;
-  flex-direction: column; /* Stack elements vertically */
-}
+
 </style>
