@@ -14,21 +14,25 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
-      <!-- drawer content -->
+    <q-drawer
+      show-if-above v-model="leftDrawerOpen"
+      side="left"
+      bordered
+      :width="250"
+      class="bg-secondary"
+    >
+      <drawer-chat-room />
     </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
 
-    <q-footer elevated class="bg-secondary text-white q-pa-md">
-      <q-toolbar class="terminal-container">
-        <q-input standout v-model="text" class="terminal bg-secondary">
+    <q-footer elevated class="text-white q-pa-md">
+      <q-toolbar class="terminal-container rounded-borders">
+        <q-input rounded standout v-model="text" class="terminal bg-secondary">
           <template v-slot:prepend>
-            <q-avatar>
-              <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg">
-            </q-avatar>
+            <q-icon name="send"/>
           </template>
         </q-input>
       </q-toolbar>
@@ -39,8 +43,10 @@
 
 <script>
 import { ref } from 'vue'
+import DrawerChatRoom from 'components/DrawerChatRoom.vue';
 
 export default {
+  components: {DrawerChatRoom},
   setup () {
     const leftDrawerOpen = ref(false)
 

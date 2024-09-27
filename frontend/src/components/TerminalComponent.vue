@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md terminal-component bg-black text-white">
+  <div class="q-pa-md terminal-component text-white">
   </div>
 </template>
 
@@ -9,6 +9,6 @@
 
 <style scoped>
 .terminal-component {
-  height: 100%;  /* Use full height available from the parent */
+  height: 100%;
 }
 </style>

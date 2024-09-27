@@ -1,7 +1,6 @@
 <template>
   <q-page class="page-container">
-    <chat-component class="chat-section">
-    </chat-component>
+    <chat-component class="chat-section"/>
   </q-page>
 </template>
 
