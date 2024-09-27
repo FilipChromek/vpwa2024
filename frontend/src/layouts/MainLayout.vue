@@ -18,35 +18,41 @@
       show-if-above v-model="leftDrawerOpen"
       side="left"
       bordered
+
       :width="250"
       class="bg-secondary"
     >
       <drawer-chat-room />
     </q-drawer>
 
-    <q-page-container>
-      <router-view />
+    <q-page-container
+      class="flex flex-col">
+      <chat-component class="flex-grow-1 full-height overflow-auto"/>
     </q-page-container>
 
-    <q-footer elevated class="text-white q-pa-md">
-      <q-toolbar class="terminal-container rounded-borders">
-        <q-input rounded standout v-model="text" class="terminal bg-secondary">
-          <template v-slot:prepend>
-            <q-icon name="send"/>
-          </template>
-        </q-input>
-      </q-toolbar>
+    <q-footer elevated
+              class="bg-grey-3 q-pa-md">
+      <q-input
+        rounded
+        outlined
+        class="terminal"
+        input
+        :input-style="{ fontSize: '16px' }">
+        <template v-slot:prepend>
+          <q-icon name="send"/>
+        </template>
+      </q-input>
     </q-footer>
-
   </q-layout>
 </template>
 
 <script>
 import { ref } from 'vue'
 import DrawerChatRoom from 'components/DrawerChatRoom.vue';
+import ChatComponent from 'components/ChatComponent.vue';
 
 export default {
-  components: {DrawerChatRoom},
+  components: {ChatComponent, DrawerChatRoom},
   setup () {
     const leftDrawerOpen = ref(false)
 
