@@ -51,30 +51,6 @@ const messages = ref([
     avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
     isSent: false  // Received message (aligned to left)
   },
-  {
-    name: 'Me',
-    text: ['trapny si jak klinec'],
-    avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
-    isSent: true  // Sent message (aligned to right)
-  },
-  {
-    name: 'Martin Hnatko',
-    text: ['fuhafuha'],
-    avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-    isSent: false  // Received message (aligned to left)
-  },
-  {
-    name: 'Me',
-    text: ['trapny si jak klinec'],
-    avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
-    isSent: true  // Sent message (aligned to right)
-  },
-  {
-    name: 'Martin Hnatko',
-    text: ['fuhafuha'],
-    avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-    isSent: false  // Received message (aligned to left)
-  },
 ])
 
 </script>
