@@ -1,5 +1,5 @@
-<template>
-  <q-layout view="hHh LpR lFf">
++<template xmlns:div="http://www.w3.org/1999/html">
+  <q-layout view="hHH LpR lFF">
 
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
@@ -23,9 +23,10 @@
       <drawer-chat-room />
     </q-drawer>
 
-    <q-page-container
-      class="flex flex-col">
-      <chat-component :messages="messages" class="flex-grow-1 full-height overflow-auto"/>
+    <q-page-container class="bg-grey-4">
+      <q-page class="row items-stretch">
+        <chat-component :messages="messages"/>
+      </q-page>
     </q-page-container>
 
     <q-footer elevated
@@ -60,37 +61,37 @@ const messages = ref([
     name: 'Me',
     text: ['Hey, how are you?'],
     avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
-    isSent: true  // Sent message (aligned to right)
+    isSent: true
   },
   {
     name: 'Martin Hnatko',
     text: ['wassupski'],
     avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-    isSent: false  // Received message (aligned to left)
+    isSent: false
   },
   {
     name: 'Me',
     text: ['All good here!'],
     avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
-    isSent: true  // Sent message (aligned to right)
+    isSent: true
   },
   {
     name: 'Martin Hnatko',
     text: ['cusbusautobus'],
     avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-    isSent: false  // Received message (aligned to left)
+    isSent: false
   },
   {
     name: 'Me',
     text: ['trapny si jak klinec'],
     avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
-    isSent: true  // Sent message (aligned to right)
+    isSent: true
   },
   {
     name: 'Martin Hnatko',
     text: ['fuhafuha'],
     avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-    isSent: false  // Received message (aligned to left)
+    isSent: false
   },
 ])
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md bg-grey-2 chat-container">
+  <div ref="chatContainer" class="chat-container q-pa-md col-12 bg-grey-2">
     <q-chat-message
       v-for="(message, index) in messages"
       :key="index"
@@ -12,24 +12,44 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, watch } from 'vue'
+
 interface Message {
   name: string;
   text: string[];
   avatar: string;
   isSent: boolean;
 }
-defineProps<{
+
+const props = defineProps<{
   messages: Message[]
 }>();
+
+const chatContainer = ref<HTMLElement | null>(null)
+
+// Function to scroll to the bottom
+const scrollToBottom = () => {
+  const container = chatContainer.value
+  if (container) {
+    container.scrollTop = container.scrollHeight
+  }
+}
+
+// Watch for new messages and scroll to the bottom
+watch(() => props.messages, () => {
+  scrollToBottom()
+}, { deep: true })
+
+// Scroll to the bottom on mount
+onMounted(() => {
+  scrollToBottom()
+})
 
 </script>
 
 <style scoped>
 .chat-container {
-  height: 100%;  /* Use full height available from the parent */
-  overflow-y: auto;  /* Enable scrolling for chat messages */
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
 }
 </style>
