@@ -1,15 +1,36 @@
 +<template xmlns:div="http://www.w3.org/1999/html">
   <q-layout view="hHH LpR lFF">
-
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer"/>
         <q-toolbar-title>
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
           </q-avatar>
           ZapoChat
         </q-toolbar-title>
+        <q-btn dense flat round icon="more_vert">
+          <q-menu v-model="headerMenu">
+            <q-list style="width: 150px">
+              <q-item clickable v-close-popup @click="onMenuSettings">
+                <q-item-section>
+                  <q-icon name="settings"/>
+                </q-item-section>
+                <q-item-section>
+                  Settings
+                </q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup @click="onMenuLogOut">
+                <q-item-section>
+                  <q-icon name="logout" color="red"/>
+                </q-item-section>
+                <q-item-section>
+                  Log out
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -54,13 +75,14 @@ import { ref } from 'vue'
 import ChatComponent from 'components/ChatComponent.vue';
 import DrawerChatRoom from 'components/DrawerChatRoom.vue';
 
+const headerMenu = ref(false)
 const leftDrawerOpen = ref(false)
 
 const messages = ref([
   {
     name: 'Me',
     text: ['Hey, how are you?'],
-    avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
+    avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
     isSent: true
   },
   {
@@ -72,7 +94,7 @@ const messages = ref([
   {
     name: 'Me',
     text: ['All good here!'],
-    avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
+    avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
     isSent: true
   },
   {
@@ -84,7 +106,7 @@ const messages = ref([
   {
     name: 'Me',
     text: ['trapny si jak klinec'],
-    avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
+    avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
     isSent: true
   },
   {
@@ -103,7 +125,7 @@ const sendMessage = () => {
     messages.value.push({
       name: 'Me',
       text: [newMessage.value], // Message content
-      avatar: 'https://cdn.quasar.dev/img/michael-avatar.png',
+      avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
       isSent: true, // Sent by me
     })
 
@@ -114,6 +136,14 @@ const sendMessage = () => {
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
+}
+
+const onMenuLogOut = () => {
+  headerMenu.value = !headerMenu.value
+}
+
+const onMenuSettings = () => {
+  headerMenu.value = !headerMenu.value
 }
 
 </script>
