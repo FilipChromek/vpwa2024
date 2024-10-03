@@ -1,5 +1,5 @@
 <template>
-  <div ref="chatContainer" class="chat-container q-pa-md col-12 bg-grey-2">
+  <div ref="chatContainer" class="chat-container q-pa-md col-12 justify-end bg-grey-2">
     <q-chat-message
       v-for="(message, index) in messages"
       :key="index"
@@ -29,9 +29,10 @@ const chatContainer = ref<HTMLElement | null>(null)
 
 // Function to scroll to the bottom
 const scrollToBottom = () => {
-  const container = chatContainer.value
-  if (container) {
-    container.scrollTop = container.scrollHeight
+  if (chatContainer.value) {
+    setTimeout(() => {
+      window.scrollTo(0, chatContainer.value!.scrollHeight)
+    }, 0)
   }
 }
 
