@@ -1,19 +1,20 @@
 <template>
-  <div ref="chatContainer" class="chat-container q-pa-md col-12 justify-end bg-grey-2">
-    <q-chat-message
-      v-for="(message, index) in messages"
-      :key="index"
-      :name="message.name"
-      :text="message.text"
-      :avatar="message.avatar"
-      :sent="message.isSent"
-      />
-  </div>
+  <q-page class="row items-stretch">
+    <div ref="chatContainer" class="chat-container q-pa-md col-12 justify-end bg-grey-2">
+      <q-chat-message
+        v-for="(message, index) in messages"
+        :key="index"
+        :name="message.name"
+        :text="message.text"
+        :avatar="message.avatar"
+        :sent="message.isSent"
+        />
+    </div>
+  </q-page>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-
 interface Message {
   name: string;
   text: string[];
