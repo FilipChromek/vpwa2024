@@ -77,7 +77,7 @@ const leftDrawerOpen = ref(false)
 const newMessage = ref('')
 
 const sendMessage = () => {
-  console.log('Message sent:', newMessage.value)
+
   newMessage.value = ''
 }
 
