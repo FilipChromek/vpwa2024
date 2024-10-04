@@ -12,7 +12,7 @@
         <q-btn dense flat round icon="more_vert">
           <q-menu v-model="headerMenu">
             <q-list style="width: 150px">
-              <q-item clickable v-close-popup @click="onMenuSettings">
+              <q-item clickable v-close-popup @click="onMenuCommands">
                 <q-item-section side>
                   <q-icon name="list"/>
                 </q-item-section>
@@ -52,27 +52,50 @@
               class="bg-grey-3 q-pa-md">
       <terminal-component />
     </q-footer>
+
+    <q-dialog v-model="isCommandDialogVisible">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Commands</div>
+        </q-card-section>
+
+        <q-card-section>
+          <p>
+            /join private
+            <br>
+            /create
+            <br>
+            /revoke
+          </p>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Close" color="primary" v-close-popup/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
 <script setup lang="ts">
-
 import { ref } from 'vue'
 import DrawerChatRoom from 'components/DrawerChatRoom.vue';
 import TerminalComponent from 'components/TerminalComponent.vue';
 
 const headerMenu = ref(false)
 const leftDrawerOpen = ref(false)
+const isCommandDialogVisible = ref(false)  // Dialog visibility control
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
-const onMenuLogOut = () => {
+const onMenuCommands = () => {
+  isCommandDialogVisible.value = true
   headerMenu.value = !headerMenu.value
 }
 
-const onMenuSettings = () => {
+const onMenuLogOut = () => {
   headerMenu.value = !headerMenu.value
 }
 
