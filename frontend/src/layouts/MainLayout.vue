@@ -13,15 +13,15 @@
           <q-menu v-model="headerMenu">
             <q-list style="width: 150px">
               <q-item clickable v-close-popup @click="onMenuSettings">
-                <q-item-section>
-                  <q-icon name="settings"/>
+                <q-item-section side>
+                  <q-icon name="list"/>
                 </q-item-section>
                 <q-item-section>
-                  Settings
+                  Commands
                 </q-item-section>
               </q-item>
               <q-item clickable v-close-popup @click="onMenuLogOut">
-                <q-item-section>
+                <q-item-section side>
                   <q-icon name="logout" color="red"/>
                 </q-item-section>
                 <q-item-section>
@@ -50,19 +50,7 @@
 
     <q-footer elevated
               class="bg-grey-3 q-pa-md">
-      <q-input
-        v-model="newMessage"
-        @keyup.enter="sendMessage"
-        placeholder="Type a message..."
-        rounded
-        outlined
-        class="terminal"
-        input
-        :input-style="{ fontSize: '16px' }">
-        <template v-slot:prepend>
-          <q-icon name="send"/>
-        </template>
-      </q-input>
+      <terminal-component />
     </q-footer>
   </q-layout>
 </template>
@@ -71,15 +59,10 @@
 
 import { ref } from 'vue'
 import DrawerChatRoom from 'components/DrawerChatRoom.vue';
+import TerminalComponent from 'components/TerminalComponent.vue';
 
 const headerMenu = ref(false)
 const leftDrawerOpen = ref(false)
-const newMessage = ref('')
-
-const sendMessage = () => {
-
-  newMessage.value = ''
-}
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
