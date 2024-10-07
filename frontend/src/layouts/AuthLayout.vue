@@ -1,13 +1,13 @@
 <template>
-  <div class="row" style="height: 100vh">
-    <div class="col-4" style="border: 1px solid black;">
+  <div class="row" style="height: 100vh; background: linear-gradient(lightcyan,lightblue)">
+    <div class="col-4 flex flex-center" style="border: 1px solid black;">
       <router-view/>
     </div>
     <q-separator vertical/>
-    <div class="col" style="border: 1px solid black;">
-    <q-avatar>
-        <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
-      </q-avatar>
+    <div class="col flex flex-center"  style="border: 1px solid black; ">
+    
+        <img class="obrazok" src="~assets/quasar-logo-vertical.svg">
+      
     </div>
   </div>
 </template>
@@ -18,4 +18,9 @@
 
 <style scoped>
 
+  .obrazok{
+
+    height: 90vh;
+    
+  }
 </style>
