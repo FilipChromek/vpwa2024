@@ -1,0 +1,51 @@
+<template>
+  <q-item clickable v-ripple tag="router-link" :to="`/chat/${room.id}`" class="full-width">
+    <q-item-section avatar>
+      <q-icon name="lock"/>
+    </q-item-section>
+    <q-item-section>
+      {{ room.name }}
+    </q-item-section>
+    <q-btn dense flat round icon="more_vert" @click.stop.prevent>
+      <q-menu v-model="chatMenu">
+        <q-list style="width: 150px">
+          <q-item clickable v-close-popup @click="leaveChatRoom">
+            <q-item-section side>
+              <q-icon name="exit_to_app" color="red"></q-icon>
+            </q-item-section>
+            <q-item-section class="text-red-10">
+              Leave Chat
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-close-popup @click="leaveChatRoom">
+            <q-item-section side>
+              <q-icon name="delete" color="red"></q-icon>
+            </q-item-section>
+            <q-item-section class="text-red-10">
+              Delete Chat
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-menu>
+    </q-btn>
+  </q-item>
+</template>
+
+<script setup lang="ts">
+import {ref} from 'vue';
+import { Room } from 'components/models';
+
+const {room} = defineProps<{
+  room: Room;
+}>();
+
+const chatMenu = ref(false)
+
+const leaveChatRoom = () => {
+  chatMenu.value = !chatMenu.value
+}
+</script>
+
+<style scoped>
+
+</style>

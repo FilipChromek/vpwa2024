@@ -24,7 +24,7 @@
                 <q-item-section side>
                   <q-icon name="logout" color="red"/>
                 </q-item-section>
-                <q-item-section>
+                <q-item-section class="text-red-10">
                   Log out
                 </q-item-section>
               </q-item>
@@ -38,7 +38,7 @@
       show-if-above v-model="leftDrawerOpen"
       side="left"
       bordered
-      :width="300"
+      :width="240"
       class="bg-grey-3"
     >
       <drawer-chat-room />
@@ -79,7 +79,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import DrawerChatRoom from 'components/DrawerChatRoom.vue';
+import DrawerChatRoom from 'components/DrawerComponent.vue';
 import TerminalComponent from 'components/TerminalComponent.vue';
 
 const headerMenu = ref(false)

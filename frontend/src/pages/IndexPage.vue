@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-// You don't need any script logic for a simple welcome page
+
 </script>
 
 <style scoped>

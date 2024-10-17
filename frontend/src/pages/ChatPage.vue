@@ -7,7 +7,6 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import ChatComponent from 'components/ChatComponent.vue'
 
-// Sample chat room data
 const chatRooms = [
   {
     id: 1,
@@ -38,9 +37,9 @@ const chatRooms = [
 const route = useRoute()
 
 const chatRoomMessages = computed(() => {
-  const chatRoomId = parseInt(route.params.id as string, 10) // Get the room ID from the URL
-  const selectedChatRoom = chatRooms.find(room => room.id === chatRoomId) // Find the room with that ID
-  return selectedChatRoom ? selectedChatRoom.messages : [] // Return messages or empty array if not found
+  const chatRoomId = parseInt(route.params.id as string, 10)
+  const selectedChatRoom = chatRooms.find(room => room.id === chatRoomId)
+  return selectedChatRoom ? selectedChatRoom.messages : []
 })
 
 </script>

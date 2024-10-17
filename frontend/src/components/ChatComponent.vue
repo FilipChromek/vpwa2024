@@ -28,7 +28,6 @@ const props = defineProps<{
 
 const chatContainer = ref<HTMLElement | null>(null)
 
-// Function to scroll to the bottom
 const scrollToBottom = () => {
   if (chatContainer.value) {
     setTimeout(() => {
@@ -37,12 +36,10 @@ const scrollToBottom = () => {
   }
 }
 
-// Watch for new messages and scroll to the bottom
 watch(() => props.messages, () => {
   scrollToBottom()
 }, { deep: true })
 
-// Scroll to the bottom on mount
 onMounted(() => {
   scrollToBottom()
 })

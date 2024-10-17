@@ -1,6 +1,13 @@
-export interface Todo {
+export interface Message {
+  name: string;
+  text: string[];
+  avatar: string;
+  isSent: boolean;
+}
+
+export interface Room {
   id: number;
-  content: string;
+  name: string
 }
 
 export interface Meta {
