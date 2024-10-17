@@ -38,7 +38,21 @@ const newMessage = ref('')
 // const route = useRoute()
 const checkforcommand = () => {
   const message = newMessage.value;
-  if (message == '/list'){
+
+  if (message.substring(0, 5) === '/join') {
+    const parameter = message.substring(5,).trim();
+    let typ = 'private';
+    if (parameter == 'public'){
+      typ = 'public';
+    }
+    console.log(typ);
+    //create channel public or private
+    
+    
+    return true;
+}
+
+  else if (message.substring(0, 5) === '/list'){
     return true;
 
   }
