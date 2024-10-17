@@ -48,6 +48,25 @@
         </q-item-section>
         <q-item-section> Humbukhumbuk humbuk </q-item-section>
       </q-item>
+
+      <q-separator spaced />
+      
+      <q-item>
+        <q-item-section>
+          <q-item-label>{{ userName }}</q-item-label>
+        </q-item-section>
+        
+        <q-item-section side>
+          <q-select
+            v-model="selectedStatus"
+            label="Status"
+            :options="statusOptions"
+            outlined
+            placeholder="Choose status"
+          />
+        </q-item-section>
+      </q-item>
+
     </q-list>
 
     <q-dialog v-model="isAddPrivateChatDialogOpen" persistent>
@@ -140,6 +159,9 @@ const addPublicChatRoom = () => {
     isAddPublicChatDialogOpen.value = false; // Close dialog
   }
 };
+const userName = ref('Filip Chromek');  // Replace with dynamic data if necessary
+const selectedStatus = ref('Online');
+const statusOptions = ref(['Online', 'Away', 'Do not disturb', 'Offline']);
 </script>
 
 <style scoped></style>

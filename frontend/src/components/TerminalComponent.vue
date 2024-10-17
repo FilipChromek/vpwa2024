@@ -15,19 +15,72 @@
 </template>
 
 <script setup lang="ts">
+
+
+const scrollToBottom = () => {
+  setTimeout(() => {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}, 0);
+};
+
 // import {useRoute} from 'vue-router';
 import {ref} from 'vue';
+import { useRoute } from 'vue-router';
+import { useChatStore } from 'stores/store';
+
+
+const chatStore = useChatStore();
+const route = useRoute();
+
 
 const newMessage = ref('')
 
 // const route = useRoute()
+const checkforcommand = () => {
+  const message = newMessage.value;
+  if (message == '/list'){
+    return true;
+
+  }
+    return false;
+
+}
 
 const sendMessage = () => {
   if (newMessage.value.trim()) {
+    
 
+    if (checkforcommand()){
+        return;
+
+    }
+
+    const chatRoomId = parseInt(route.params.id as string, 10);
+    const selectedChatRoom = chatStore.chatRooms.find(
+      (room) => room.id === chatRoomId
+    );
+    
+    if (selectedChatRoom) {
+      //console.log(1);
+      //selectedChatRoom.messages.push();
+      chatStore.send_message({
+        name: 'Me',
+        text: [newMessage.value.trim()],
+        avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
+        isSent: true,
+      },chatRoomId)
+
+
+
+      
+    }
+    scrollToBottom();
   }
-  newMessage.value = ''
-}
+
+  newMessage.value = ''; // clear the input after sending
+};
+
+
 
 </script>
 

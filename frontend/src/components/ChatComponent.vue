@@ -1,6 +1,8 @@
 <template>
   <q-page class="row items-stretch">
-    <div ref="chatContainer" class="chat-container q-pa-md col-12 justify-end bg-grey-2">
+    <q-btn @click="loadMoreMessages" label="Load More Messages" flat />
+
+    <div ref="chatContainer" @scroll="handleScroll" class="chat-container q-pa-md col-12 justify-end bg-grey-2">
       <q-chat-message
         v-for="(message, index) in messages"
         :key="index"
@@ -15,18 +17,23 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-interface Message {
-  name: string;
-  text: string[];
-  avatar: string;
-  isSent: boolean;
-}
+import { Message } from 'components/models';
 
 const props = defineProps<{
   messages: Message[]
 }>();
-
-const chatContainer = ref<HTMLElement | null>(null)
+const emit = defineEmits(['loadMoreMessages']);
+const loadMoreMessages = () => {
+  console.log(10);
+  emit('loadMoreMessages');
+}
+const chatContainer = ref<HTMLElement | null>(null);
+  const handleScroll = () => {
+   // console.log(5);
+  if (chatContainer.value?.scrollTop === 0) { // Optional chaining to check if chatContainer is defined
+    emit('loadMoreMessages'); // Emit event to load more messages when user reaches the top
+  }
+};
 
 const scrollToBottom = () => {
   if (chatContainer.value) {
@@ -37,7 +44,7 @@ const scrollToBottom = () => {
 }
 
 watch(() => props.messages, () => {
-  scrollToBottom()
+  //scrollToBottom()
 }, { deep: true })
 
 onMounted(() => {
