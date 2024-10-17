@@ -32,18 +32,21 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import { ref, defineProps, defineEmits } from 'vue';
 import { Room } from 'components/models';
 
 const {room} = defineProps<{
   room: Room;
 }>();
 
+const emit = defineEmits(['remove'])
 const chatMenu = ref(false)
 
 const leaveChatRoom = () => {
   chatMenu.value = !chatMenu.value
+  emit('remove', room)
 }
+
 </script>
 
 <style scoped>
