@@ -7,8 +7,10 @@ export interface Message {
 
 export interface Room {
   id: number;
-  name: string
-}
+  name: string;
+  type: string;
+  messages: Message[];
+} // type ze by som dal typescriptovy enum
 
 export interface Meta {
   totalCount: number;

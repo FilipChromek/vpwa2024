@@ -1,11 +1,12 @@
-+<template xmlns:div="http://www.w3.org/1999/html">
++
+<template xmlns:div="http://www.w3.org/1999/html">
   <q-layout view="hHH LpR lFF">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer"/>
+        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
         <q-toolbar-title>
           <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
           </q-avatar>
           ZapoChat
         </q-toolbar-title>
@@ -14,19 +15,15 @@
             <q-list style="width: 150px">
               <q-item clickable v-close-popup @click="onMenuCommands">
                 <q-item-section side>
-                  <q-icon name="list"/>
+                  <q-icon name="list" />
                 </q-item-section>
-                <q-item-section>
-                  Commands
-                </q-item-section>
+                <q-item-section> Commands </q-item-section>
               </q-item>
               <q-item clickable v-close-popup @click="onMenuLogOut">
                 <q-item-section side>
-                  <q-icon name="logout" color="red"/>
+                  <q-icon name="logout" color="red" />
                 </q-item-section>
-                <q-item-section class="text-red-10">
-                  Log out
-                </q-item-section>
+                <q-item-section class="text-red-10"> Log out </q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -35,7 +32,8 @@
     </q-header>
 
     <q-drawer
-      show-if-above v-model="leftDrawerOpen"
+      show-if-above
+      v-model="leftDrawerOpen"
       side="left"
       bordered
       :width="240"
@@ -48,8 +46,7 @@
       <router-view />
     </q-page-container>
 
-    <q-footer elevated
-              class="bg-grey-3 q-pa-md">
+    <q-footer elevated class="bg-grey-3 q-pa-md">
       <terminal-component />
     </q-footer>
 
@@ -61,16 +58,16 @@
 
         <q-card-section>
           <p>
-            /join private
-            <br>
-            /create
-            <br>
-            /revoke
+            /join private - Creates a new private channel
+            <br />
+            /cancel - Leave this chat room
+            <br />
+            /list - Lists every user in this chat room
           </p>
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn flat label="Close" color="primary" v-close-popup/>
+          <q-btn flat label="Close" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -78,27 +75,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 import DrawerChatRoom from 'components/DrawerComponent.vue';
 import TerminalComponent from 'components/TerminalComponent.vue';
 
-const headerMenu = ref(false)
-const leftDrawerOpen = ref(false)
-const isCommandDialogVisible = ref(false)  // Dialog visibility control
+const headerMenu = ref(false);
+const leftDrawerOpen = ref(false);
+const isCommandDialogVisible = ref(false); // Dialog visibility control
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+};
 
 const onMenuCommands = () => {
-  isCommandDialogVisible.value = true
-  headerMenu.value = !headerMenu.value
-}
+  isCommandDialogVisible.value = true;
+  headerMenu.value = !headerMenu.value;
+};
 
 const onMenuLogOut = () => {
-  headerMenu.value = !headerMenu.value
-}
-
+  headerMenu.value = !headerMenu.value;
+};
 </script>
 
 <style scoped>
@@ -108,4 +104,3 @@ const onMenuLogOut = () => {
   width: 100%;
 }
 </style>
-

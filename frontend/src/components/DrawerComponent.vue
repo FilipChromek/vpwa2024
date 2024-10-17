@@ -9,11 +9,34 @@
           round
           icon="add"
           color="primary"
-          @click="openAddChatDialog"
+          @click="openAddPrivateChatDialog"
         />
       </div>
-      <template v-for="room in chatRooms" :key="room.id">
-        <chat-room :room="room" @remove="removeChatRoom"></chat-room>
+      <template v-for="room in privateChatRooms" :key="room.id">
+        <chat-room
+          :room="room"
+          @remove="chatStore.removeChatRoom(room.id)"
+        ></chat-room>
+      </template>
+
+      <q-separator spaced />
+
+      <div class="flex flex-row justify-between q-px-md">
+        <h3 class="text-subtitle2">Public Chats</h3>
+        <q-btn
+          dense
+          flat
+          round
+          icon="add"
+          color="primary"
+          @click="openAddPublicChatDialog"
+        />
+      </div>
+      <template v-for="room in publicChatRooms" :key="room.id">
+        <chat-room
+          :room="room"
+          @remove="chatStore.removeChatRoom(room.id)"
+        ></chat-room>
       </template>
 
       <q-separator spaced />
@@ -27,15 +50,15 @@
       </q-item>
     </q-list>
 
-    <q-dialog v-model="isAddChatDialogOpen" persistent>
+    <q-dialog v-model="isAddPrivateChatDialogOpen" persistent>
       <q-card>
         <q-card-section>
-          <div class="text-h6">Add New Chat</div>
+          <div class="text-h6">Add New Private Chat</div>
         </q-card-section>
 
         <q-card-section>
           <q-input
-            v-model="newChatRoomName"
+            v-model="newPrivateChatRoomName"
             rounded
             outlined
             placeholder="Enter chat room name..."
@@ -44,7 +67,29 @@
 
         <q-card-actions align="right">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add" color="primary" @click="addChatRoom" />
+          <q-btn flat label="Add" color="primary" @click="addPrivateChatRoom" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="isAddPublicChatDialogOpen" persistent>
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Add New Public Chat</div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-input
+            v-model="newPublicChatRoomName"
+            rounded
+            outlined
+            placeholder="Enter chat room name..."
+          />
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn flat label="Add" color="primary" @click="addPublicChatRoom" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -53,49 +98,47 @@
 
 <script setup lang="ts">
 import ChatRoom from 'components/ChatRoom.vue';
-import { Room } from 'components/models';
-import { ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, computed } from 'vue';
+import { useChatStore } from 'stores/store';
 
-const chatRooms = ref<Room[]>([
-  { id: 1, name: 'Private Chat 1' },
-  { id: 2, name: 'Private Chat 2' },
-  { id: 3, name: 'Public Chat 1' },
-  { id: 4, name: 'Public Chat 2' },
-]);
+const chatStore = useChatStore();
 
-const isAddChatDialogOpen = ref(false);
-const newChatRoomName = ref('');
+const privateChatRooms = computed(() =>
+  chatStore.chatRooms.filter((room) => room.type === 'private')
+);
 
-const openAddChatDialog = () => {
-  isAddChatDialogOpen.value = true;
+const publicChatRooms = computed(() =>
+  chatStore.chatRooms.filter((room) => room.type === 'public')
+);
+
+const isAddPrivateChatDialogOpen = ref(false);
+const newPrivateChatRoomName = ref('');
+
+const isAddPublicChatDialogOpen = ref(false);
+const newPublicChatRoomName = ref('');
+
+const openAddPrivateChatDialog = () => {
+  isAddPrivateChatDialogOpen.value = true;
 };
 
-const addChatRoom = () => {
-  if (newChatRoomName.value.trim()) {
-    const newRoom: Room = {
-      id: chatRooms.value.length + 1,
-      name: newChatRoomName.value,
-    };
-    chatRooms.value.push(newRoom);
-    newChatRoomName.value = '';
-    isAddChatDialogOpen.value = false;
+const openAddPublicChatDialog = () => {
+  isAddPublicChatDialogOpen.value = true;
+};
+
+const addPrivateChatRoom = () => {
+  if (newPrivateChatRoomName.value.trim()) {
+    chatStore.addChatRoom(newPrivateChatRoomName.value, 'private'); // Add private chat room
+    newPrivateChatRoomName.value = ''; // Clear input
+    isAddPrivateChatDialogOpen.value = false; // Close dialog
   }
 };
 
-const router = useRouter();
-const route = useRoute();
-
-const removeChatRoom = (roomToRemove: Room) => {
-  if (
-    route.params.id &&
-    parseInt(route.params.id as string, 10) === roomToRemove.id
-  ) {
-    router.push('/');
+const addPublicChatRoom = () => {
+  if (newPublicChatRoomName.value.trim()) {
+    chatStore.addChatRoom(newPublicChatRoomName.value, 'public'); // Add public chat room
+    newPublicChatRoomName.value = ''; // Clear input
+    isAddPublicChatDialogOpen.value = false; // Close dialog
   }
-  chatRooms.value = chatRooms.value.filter(
-    (room) => room.id !== roomToRemove.id
-  );
 };
 </script>
 
