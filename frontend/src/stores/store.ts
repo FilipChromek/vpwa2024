@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { Message, Room } from 'components/models';
+import { Message, Room, User } from 'components/models';
 
 export const useChatStore = defineStore('chatStore', () => {
   const chatRooms = ref<Room[]>([
@@ -325,6 +325,13 @@ export const useChatStore = defineStore('chatStore', () => {
     },
   ]);
 
+  const people = ref<User[]>([
+    { id: 1, name: 'Adam Kačmár' },
+    { id: 2, name: 'Filip Chromek' },
+    { id: 3, name: 'Ľubomír Tkač' },
+    { id: 4, name: 'Július Pénzeš' },
+  ]);
+
   const sendMessage = (message: string, room_id: number) => {
     const selectedChatRoom = chatRooms.value.find(
       (room) => room.id === room_id
@@ -368,6 +375,7 @@ export const useChatStore = defineStore('chatStore', () => {
   return {
     chatRooms,
     pendingRooms,
+    people,
     addChatRoom,
     removeChatRoom,
     removePendingChatRoom,

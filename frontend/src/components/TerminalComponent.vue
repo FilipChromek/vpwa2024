@@ -1,19 +1,53 @@
 <template>
-  <p style="color: black">Adam Kačmár and 2 others are typing...</p>
-  <q-input
-    v-model="newMessage"
-    @keyup.enter="sendMessage"
-    placeholder="Type a message..."
-    rounded
-    outlined
-    class="terminal"
-    input
-    :input-style="{ fontSize: '16px' }"
-  >
-    <template v-slot:prepend>
-      <q-icon name="send" />
-    </template>
-  </q-input>
+  <p style="color: black; padding-left: 10px">
+    <i>Adam Kačmár and 2 others are typing...</i>
+  </p>
+  <div class="row items-center q-gutter-md">
+    <q-input
+      v-model="newMessage"
+      @keyup.enter="sendMessage"
+      placeholder="Type a message..."
+      rounded
+      outlined
+      input
+      style="flex-grow: 1"
+      :input-style="{ fontSize: '16px' }"
+    >
+      <template v-slot:prepend>
+        <q-icon name="send" />
+      </template>
+    </q-input>
+
+    <q-btn
+      dense
+      flat
+      round
+      size="lg"
+      icon="people"
+      @click="openPeopleList"
+      style="background: #38003c"
+      text-color="white"
+      class="q-ml-sm"
+    />
+
+    <q-dialog v-model="isPeopleListOpen" persistent>
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">People in this Channel</div>
+        </q-card-section>
+
+        <q-list>
+          <q-item v-for="person in chatStore.people" :key="person.id">
+            <q-item-section>{{ person.name }}</q-item-section>
+          </q-item>
+        </q-list>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Close" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -34,6 +68,11 @@ const chatStore = useChatStore();
 const route = useRoute();
 
 const newMessage = ref('');
+const isPeopleListOpen = ref(false);
+
+const openPeopleList = () => {
+  isPeopleListOpen.value = true;
+};
 
 // const route = useRoute()
 const checkForCommand = () => {
