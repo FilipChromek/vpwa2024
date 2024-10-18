@@ -89,6 +89,33 @@ const checkForCommand = () => {
 
     return true;
   } else if (message.substring(0, 5) === '/list') {
+    openPeopleList();
+    newMessage.value = '';
+    return true;
+  }
+  else if (message.substring(0, 5) === '/quit') {
+    
+    newMessage.value = '';
+    return true;
+  }
+  else if (message.substring(0, 5) === '/cancel') {
+    
+    newMessage.value = '';
+    return true;
+  }
+  else if (message.substring(0, 5) === '/invite') {
+    
+    newMessage.value = '';
+    return true;
+  }
+  else if (message.substring(0, 5) === '/revoke') {
+   
+    newMessage.value = '';
+    return true;
+  }
+  else if (message.substring(0, 5) === '/kick') {
+    
+    newMessage.value = '';
     return true;
   }
   return false;
