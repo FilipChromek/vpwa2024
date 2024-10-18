@@ -6,16 +6,24 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
-      { path: 'chat/:id', component: () => import('pages/newChatPage.vue')}
+      { path: 'chat/:id', component: () => import('pages/ChatPage.vue') },
     ],
   },
   {
     path: '/auth',
     component: () => import('layouts/AuthLayout.vue'),
     children: [
-      { path: 'login', name: 'login', component: () => import('pages/auth/LoginPage.vue')},
-      { path: 'register', name: 'register', component: () => import('pages/auth/RegisterPage.vue')}
-    ]
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('pages/auth/LoginPage.vue'),
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: () => import('pages/auth/RegisterPage.vue'),
+      },
+    ],
   },
   {
     path: '/:catchAll(.*)*',

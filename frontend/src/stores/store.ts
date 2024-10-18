@@ -3,35 +3,7 @@ import { ref } from 'vue';
 import { Message, Room } from 'components/models';
 
 export const useChatStore = defineStore('chatStore', () => {
-  const messages = ref<Message[]>([]);
-  const new_messages = ref<Message[]>([]);
   const chatRooms = ref<Room[]>([
-    {
-      id: 1,
-      name: 'Private Chat 1',
-      type: 'private',
-      messages: [
-       
-      ],
-    },
-    {
-      id: 2,
-      name: 'Private Chat 2',
-      type: 'private',
-      messages: [
-        
-      ],
-    },
-    {
-      id: 3,
-      name: 'Public Chat 1',
-      type: 'public',
-      messages: [
-       
-      ],
-    },
-  ]);
-  const database = ref<Room[]>([
     {
       id: 1,
       name: 'Private Chat 1',
@@ -168,107 +140,127 @@ export const useChatStore = defineStore('chatStore', () => {
           text: ['Hey there!20'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!19'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!18'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!17'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!16'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!15'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!14'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!13'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!12'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!11'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!10'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!9'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!8'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!7'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!6'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!5'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!4'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!3'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!2'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        },{
+        },
+        {
           name: 'Me',
           text: ['Hey there!1'],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        }
+        },
       ],
     },
     {
@@ -310,30 +302,22 @@ export const useChatStore = defineStore('chatStore', () => {
       ],
     },
   ]);
-  const send_message = (message:Message,room_id:number) => {
-    const database_data = database.value.find((room) => room.id === room_id);
-    database_data?.messages.push(message);
-    messages.value.push(message);
-    //new_messages.value.push(message);
-// Reassign the array to trigger reactivity
-new_messages.value = [message];
-    //console.log(message);
-  }
-  const reset_messages = () =>{
-    messages.value = [];
-    new_messages.value = [];
-  }
-  const getMessages = (roomId: number, offset: number, limit: number) => {
-    
-    const database_data = database.value.find((room) => room.id === roomId);
-    console.log(database_data);
-    if (database_data) {
-        // Reverse the messages to load the latest ones first
-         const newMessages = database_data.messages.slice().reverse().slice(offset, offset + limit).reverse();
-      messages.value = [...newMessages, ...messages.value];
-      return newMessages;
+
+  const sendMessage = (message: string, room_id: number) => {
+    const selectedChatRoom = chatRooms.value.find(
+      (room) => room.id === room_id
+    );
+    if (selectedChatRoom) {
+      const newMessage: Message = {
+        name: 'Me',
+        text: [message],
+        avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
+        isSent: true,
+      };
+      selectedChatRoom.messages.push(newMessage);
+    } else {
+      console.error('Room with this id not found.');
     }
-    return [];
   };
 
   const addChatRoom = (
@@ -347,7 +331,6 @@ new_messages.value = [message];
       messages: [],
     };
     chatRooms.value.push(newRoom);
-    database.value.push(newRoom);
   };
 
   const removeChatRoom = (roomId: number) => {
@@ -358,10 +341,6 @@ new_messages.value = [message];
     chatRooms,
     addChatRoom,
     removeChatRoom,
-    getMessages,
-    send_message,
-    messages,
-    reset_messages,
-    new_messages,
+    sendMessage,
   };
 });

@@ -50,12 +50,12 @@
       </q-item>
 
       <q-separator spaced />
-      
+
       <q-item>
         <q-item-section>
           <q-item-label>{{ userName }}</q-item-label>
         </q-item-section>
-        
+
         <q-item-section side>
           <q-select
             v-model="selectedStatus"
@@ -66,7 +66,6 @@
           />
         </q-item-section>
       </q-item>
-
     </q-list>
 
     <q-dialog v-model="isAddPrivateChatDialogOpen" persistent>
@@ -146,20 +145,21 @@ const openAddPublicChatDialog = () => {
 
 const addPrivateChatRoom = () => {
   if (newPrivateChatRoomName.value.trim()) {
-    chatStore.addChatRoom(newPrivateChatRoomName.value, 'private'); // Add private chat room
-    newPrivateChatRoomName.value = ''; // Clear input
-    isAddPrivateChatDialogOpen.value = false; // Close dialog
+    chatStore.addChatRoom(newPrivateChatRoomName.value, 'private');
+    newPrivateChatRoomName.value = '';
+    isAddPrivateChatDialogOpen.value = false;
   }
 };
 
 const addPublicChatRoom = () => {
   if (newPublicChatRoomName.value.trim()) {
-    chatStore.addChatRoom(newPublicChatRoomName.value, 'public'); // Add public chat room
-    newPublicChatRoomName.value = ''; // Clear input
-    isAddPublicChatDialogOpen.value = false; // Close dialog
+    chatStore.addChatRoom(newPublicChatRoomName.value, 'public');
+    newPublicChatRoomName.value = '';
+    isAddPublicChatDialogOpen.value = false;
   }
 };
-const userName = ref('Filip Chromek');  // Replace with dynamic data if necessary
+
+const userName = ref('Filip Chromek'); // Replace with dynamic data if necessary
 const selectedStatus = ref('Online');
 const statusOptions = ref(['Online', 'Away', 'Do not disturb', 'Offline']);
 </script>

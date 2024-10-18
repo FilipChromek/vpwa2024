@@ -1,7 +1,13 @@
 <template>
-  <q-item clickable v-ripple tag="router-link" :to="`/chat/${room.id}`" class="full-width">
+  <q-item
+    clickable
+    v-ripple
+    tag="router-link"
+    :to="`/chat/${room.id}`"
+    class="full-width"
+  >
     <q-item-section avatar>
-      <q-icon name="lock"/>
+      <q-icon name="chat" />
     </q-item-section>
     <q-item-section>
       {{ room.name }}
@@ -13,17 +19,13 @@
             <q-item-section side>
               <q-icon name="exit_to_app" color="red"></q-icon>
             </q-item-section>
-            <q-item-section class="text-red-10">
-              Leave Chat
-            </q-item-section>
+            <q-item-section class="text-red-10"> Leave Chat </q-item-section>
           </q-item>
           <q-item clickable v-close-popup @click="leaveChatRoom">
             <q-item-section side>
               <q-icon name="delete" color="red"></q-icon>
             </q-item-section>
-            <q-item-section class="text-red-10">
-              Delete Chat
-            </q-item-section>
+            <q-item-section class="text-red-10"> Delete Chat </q-item-section>
           </q-item>
         </q-list>
       </q-menu>
@@ -35,20 +37,17 @@
 import { ref, defineProps, defineEmits } from 'vue';
 import { Room } from 'components/models';
 
-const {room} = defineProps<{
+const { room } = defineProps<{
   room: Room;
 }>();
 
-const emit = defineEmits(['remove'])
-const chatMenu = ref(false)
+const emit = defineEmits(['remove']);
+const chatMenu = ref(false);
 
 const leaveChatRoom = () => {
-  chatMenu.value = !chatMenu.value
-  emit('remove', room)
-}
-
+  chatMenu.value = !chatMenu.value;
+  emit('remove', room);
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
