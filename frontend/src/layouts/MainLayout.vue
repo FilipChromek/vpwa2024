@@ -83,6 +83,7 @@ import TerminalComponent from 'components/TerminalComponent.vue';
 import ChatRoomsComponent from 'components/ChatRoomsComponent.vue';
 import StatusComponent from 'components/StatusComponent.vue';
 
+
 const headerMenu = ref(false);
 const leftDrawerOpen = ref(false);
 const isCommandDialogVisible = ref(false); // Dialog visibility control
@@ -97,8 +98,23 @@ const onMenuCommands = () => {
 };
 
 const onMenuLogOut = () => {
+  localStorage.removeItem('user');
   headerMenu.value = !headerMenu.value;
+  window.location.href = '/auth/login';
 };
+
+const checkUser = () => {
+  const user = localStorage.getItem('user');
+  if (!user) {
+    window.location.href = '/auth/login';
+  }
+  else{
+  const parsedUser = JSON.parse(user);
+  console.log(parsedUser);
+  }
+
+}
+checkUser();
 </script>
 
 <style scoped>

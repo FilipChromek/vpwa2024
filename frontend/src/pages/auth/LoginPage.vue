@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+
+
 const username = ref('');
 const password = ref('');
 
 const login = () => {
   // Handle login logic here
   console.log(`Username: ${username.value}, Password: ${password.value}`);
+
+
+  const obj = { name: username.value, id: 1 };
+  localStorage.setItem('user', JSON.stringify(obj));
+  window.location.href = '/';
 };
 </script>
 
@@ -33,6 +40,8 @@ const login = () => {
 
       <q-btn type="submit" label="Login" color="primary" />
     </q-form>
+    <br>
+    <a href="/auth/register">I want to register</a>
   </div>
 </template>
 

@@ -371,7 +371,7 @@ export const useChatStore = defineStore('chatStore', () => {
       (room) => room.id !== roomId
     );
   }; // TODO tu este treba routing ak je tento chat momentalne na ChatPage
-
+  
   return {
     chatRooms,
     pendingRooms,
@@ -380,5 +380,6 @@ export const useChatStore = defineStore('chatStore', () => {
     removeChatRoom,
     removePendingChatRoom,
     sendMessage,
+   
   };
 });

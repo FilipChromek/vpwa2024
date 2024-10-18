@@ -64,7 +64,8 @@ const register = () => {
 
   <q-btn type="submit" label="Register" color="primary" />
 </q-form>
-
+<br>
+    <a href="/auth/login">I want to login</a>
   </div>
 </template>
 
