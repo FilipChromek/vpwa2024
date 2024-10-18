@@ -371,6 +371,29 @@ export const useChatStore = defineStore('chatStore', () => {
       (room) => room.id !== roomId
     );
   }; // TODO tu este treba routing ak je tento chat momentalne na ChatPage
+
+  const lazyLoadMessages = (roomId:number) =>{
+    const offset = 10;
+    const selectedChatRoom = chatRooms.value.find(
+      (room) => room.id === roomId
+    );
+    if (selectedChatRoom){
+      const pocet_sprav = selectedChatRoom.messages.length;
+      for(let i = pocet_sprav; i<pocet_sprav+offset;i++ ){
+        const newMessage: Message = {
+          name: 'Me',
+          text: [`Hey there! ${i}`],
+          avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
+          isSent: true,
+        }
+        selectedChatRoom.messages= [newMessage,...selectedChatRoom.messages];
+
+      }
+
+    }
+    
+
+  }
   
   return {
     chatRooms,
@@ -380,6 +403,7 @@ export const useChatStore = defineStore('chatStore', () => {
     removeChatRoom,
     removePendingChatRoom,
     sendMessage,
+    lazyLoadMessages
    
   };
 });
