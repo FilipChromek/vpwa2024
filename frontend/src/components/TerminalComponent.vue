@@ -19,7 +19,7 @@
 
 const scrollToBottom = () => {
   setTimeout(() => {
-  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  window.scrollTo({ top: document.body.scrollHeight });
 }, 0);
 };
 

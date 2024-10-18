@@ -4,6 +4,7 @@ import { Message, Room } from 'components/models';
 
 export const useChatStore = defineStore('chatStore', () => {
   const messages = ref<Message[]>([]);
+  const new_messages = ref<Message[]>([]);
   const chatRooms = ref<Room[]>([
     {
       id: 1,
@@ -313,10 +314,14 @@ export const useChatStore = defineStore('chatStore', () => {
     const database_data = database.value.find((room) => room.id === room_id);
     database_data?.messages.push(message);
     messages.value.push(message);
+    //new_messages.value.push(message);
+// Reassign the array to trigger reactivity
+new_messages.value = [message];
     //console.log(message);
   }
   const reset_messages = () =>{
     messages.value = [];
+    new_messages.value = [];
   }
   const getMessages = (roomId: number, offset: number, limit: number) => {
     
@@ -326,9 +331,11 @@ export const useChatStore = defineStore('chatStore', () => {
         // Reverse the messages to load the latest ones first
          const newMessages = database_data.messages.slice().reverse().slice(offset, offset + limit).reverse();
       messages.value = [...newMessages, ...messages.value];
+      return newMessages;
     }
-    return;
+    return [];
   };
+
   const addChatRoom = (
     roomName: string,
     type: 'private' | 'public' = 'private'
@@ -340,6 +347,7 @@ export const useChatStore = defineStore('chatStore', () => {
       messages: [],
     };
     chatRooms.value.push(newRoom);
+    database.value.push(newRoom);
   };
 
   const removeChatRoom = (roomId: number) => {
@@ -354,5 +362,6 @@ export const useChatStore = defineStore('chatStore', () => {
     send_message,
     messages,
     reset_messages,
+    new_messages,
   };
 });

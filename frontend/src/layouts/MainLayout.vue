@@ -42,9 +42,10 @@
       <drawer-chat-room />
     </q-drawer>
 
-    <q-page-container class="bg-grey-4">
-      <router-view />
-    </q-page-container>
+    <q-page-container class="bg-white-4 q-pa-md">
+  <router-view />
+</q-page-container>
+
 
     <q-footer elevated class="bg-grey-3 q-pa-md">
       <terminal-component />
