@@ -51,16 +51,6 @@
       </template>
 
       <q-separator spaced />
-
-      <q-item-label header>Invitations</q-item-label>
-      <q-item clickable>
-        <q-item-section avatar>
-          <q-icon name="question_mark" />
-        </q-item-section>
-        <q-item-section> Humbukhumbuk humbuk </q-item-section>
-      </q-item>
-
-      <q-separator spaced />
     </q-list>
 
     <q-dialog v-model="isAddPrivateChatDialogOpen" persistent>

@@ -1,4 +1,5 @@
 <template>
+  <p style="color: black">Adam Kačmár and 2 others are typing...</p>
   <q-input
     v-model="newMessage"
     @keyup.enter="sendMessage"
