@@ -1,6 +1,17 @@
 <template>
   <q-scroll-area class="fit">
     <q-list padding class="rounded-borders">
+      <template v-if="pendingRooms.length > 0">
+        <div class="flex flex-row justify-between q-px-md">
+          <h3 class="text-subtitle2">Invitations</h3>
+        </div>
+        <template v-for="room in pendingRooms" :key="room.id">
+          <chat-room
+            :room="room"
+            @remove="chatStore.removePendingChatRoom(room.id)"
+          ></chat-room>
+        </template>
+      </template>
       <div class="flex flex-row justify-between q-px-md">
         <h3 class="text-subtitle2">Private Chats</h3>
         <q-btn
@@ -50,22 +61,6 @@
       </q-item>
 
       <q-separator spaced />
-
-      <q-item>
-        <q-item-section>
-          <q-item-label>{{ userName }}</q-item-label>
-        </q-item-section>
-
-        <q-item-section side>
-          <q-select
-            v-model="selectedStatus"
-            label="Status"
-            :options="statusOptions"
-            outlined
-            placeholder="Choose status"
-          />
-        </q-item-section>
-      </q-item>
     </q-list>
 
     <q-dialog v-model="isAddPrivateChatDialogOpen" persistent>
@@ -121,6 +116,8 @@ import { useChatStore } from 'stores/store';
 
 const chatStore = useChatStore();
 
+const pendingRooms = computed(() => chatStore.pendingRooms);
+
 const privateChatRooms = computed(() =>
   chatStore.chatRooms.filter((room) => room.type === 'private')
 );
@@ -158,10 +155,6 @@ const addPublicChatRoom = () => {
     isAddPublicChatDialogOpen.value = false;
   }
 };
-
-const userName = ref('Filip Chromek'); // Replace with dynamic data if necessary
-const selectedStatus = ref('Online');
-const statusOptions = ref(['Online', 'Away', 'Do not disturb', 'Offline']);
 </script>
 
 <style scoped></style>

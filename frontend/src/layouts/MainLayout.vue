@@ -1,5 +1,5 @@
 +
-<template xmlns:div="http://www.w3.org/1999/html">
+<template>
   <q-layout view="hHH LpR lFF">
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
@@ -36,16 +36,18 @@
       v-model="leftDrawerOpen"
       side="left"
       bordered
-      :width="240"
+      :width="270"
       class="bg-grey-3"
     >
-      <drawer-chat-room />
+      <div class="column no-wrap full-height">
+        <chat-rooms-component class="flex-grow-1" />
+        <status-component class="q-pa-sm" />
+      </div>
     </q-drawer>
 
     <q-page-container class="bg-white-4 q-pa-md">
-  <router-view />
-</q-page-container>
-
+      <router-view />
+    </q-page-container>
 
     <q-footer elevated class="bg-grey-3 q-pa-md">
       <terminal-component />
@@ -77,8 +79,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import DrawerChatRoom from 'components/DrawerComponent.vue';
 import TerminalComponent from 'components/TerminalComponent.vue';
+import ChatRoomsComponent from 'components/ChatRoomsComponent.vue';
+import StatusComponent from 'components/StatusComponent.vue';
 
 const headerMenu = ref(false);
 const leftDrawerOpen = ref(false);

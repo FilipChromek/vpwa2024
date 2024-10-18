@@ -303,6 +303,28 @@ export const useChatStore = defineStore('chatStore', () => {
     },
   ]);
 
+  const pendingRooms = ref<Room[]>([
+    {
+      id: 4,
+      name: 'Unknown Chat ',
+      type: 'private',
+      messages: [
+        {
+          name: 'Me',
+          text: ['This is Private Chat 2.'],
+          avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
+          isSent: true,
+        },
+        {
+          name: 'Colleague',
+          text: ['Nice to chat with you here.'],
+          avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
+          isSent: false,
+        },
+      ],
+    },
+  ]);
+
   const sendMessage = (message: string, room_id: number) => {
     const selectedChatRoom = chatRooms.value.find(
       (room) => room.id === room_id
@@ -337,10 +359,18 @@ export const useChatStore = defineStore('chatStore', () => {
     chatRooms.value = chatRooms.value.filter((room) => room.id !== roomId);
   }; // TODO tu este treba routing ak je tento chat momentalne na ChatPage
 
+  const removePendingChatRoom = (roomId: number) => {
+    pendingRooms.value = pendingRooms.value.filter(
+      (room) => room.id !== roomId
+    );
+  }; // TODO tu este treba routing ak je tento chat momentalne na ChatPage
+
   return {
     chatRooms,
+    pendingRooms,
     addChatRoom,
     removeChatRoom,
+    removePendingChatRoom,
     sendMessage,
   };
 });
