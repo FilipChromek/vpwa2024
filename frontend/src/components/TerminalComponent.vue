@@ -74,19 +74,24 @@ const openPeopleList = () => {
   isPeopleListOpen.value = true;
 };
 
+
 // const route = useRoute()
 const checkForCommand = () => {
   const message = newMessage.value;
 
   if (message.substring(0, 5) === '/join') {
-    const parameter = message.substring(5).trim();
-    let typ = 'private';
-    if (parameter == 'public') {
-      typ = 'public';
+    const parameter = message.substring(5).split(' ');
+    const name = parameter[1];
+    
+    if (parameter[2] == 'public') {
+      chatStore.addChatRoom(name, 'public');
     }
-    console.log(typ);
-    //create channel public or private
+    else{
+      chatStore.addChatRoom(name, 'private');
 
+    }
+    newMessage.value = '';
+    
     return true;
   } else if (message.substring(0, 5) === '/list') {
     openPeopleList();
@@ -94,21 +99,21 @@ const checkForCommand = () => {
     return true;
   }
   else if (message.substring(0, 5) === '/quit') {
+    chatStore.removeChatRoom(parseInt(route.params.id as string, 10))
+    newMessage.value = '';
+    return true;
+  }
+  else if (message.substring(0, 7) === '/cancel') {
+    chatStore.removeChatRoom(parseInt(route.params.id as string, 10))
+    newMessage.value = '';
+    return true;
+  }
+  else if (message.substring(0, 7) === '/invite') {
     
     newMessage.value = '';
     return true;
   }
-  else if (message.substring(0, 5) === '/cancel') {
-    
-    newMessage.value = '';
-    return true;
-  }
-  else if (message.substring(0, 5) === '/invite') {
-    
-    newMessage.value = '';
-    return true;
-  }
-  else if (message.substring(0, 5) === '/revoke') {
+  else if (message.substring(0, 7) === '/revoke') {
    
     newMessage.value = '';
     return true;

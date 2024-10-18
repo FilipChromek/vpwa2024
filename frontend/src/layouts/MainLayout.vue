@@ -61,11 +61,20 @@
 
         <q-card-section>
           <p>
-            /join private - Creates a new private channel
+            /join channelName [ private | public ] - Creates a new channel or joins channel
             <br />
             /cancel - Leave this chat room
             <br />
             /list - Lists every user in this chat room
+            <br />
+            /invite nickName - Invite user to private channel
+            <br />
+            /revoke nickName - Delete user from private channel
+            <br />
+            /kick nickName - Kicks user from channel
+            <br />
+            /quit - Delete this channel
+            
           </p>
         </q-card-section>
 
