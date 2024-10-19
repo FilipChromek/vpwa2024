@@ -30,7 +30,7 @@
       class="q-ml-sm"
     />
 
-    <q-dialog v-model="isPeopleListOpen" persistent>
+    <q-dialog v-model="isPeopleListOpen">
       <q-card>
         <q-card-section>
           <div class="text-h6">People in this Channel</div>
@@ -59,13 +59,14 @@ const scrollToBottom = () => {
 };
  */
 
-// import {useRoute} from 'vue-router';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useChatStore } from 'stores/store';
+import { useRouter } from 'vue-router';
 
 const chatStore = useChatStore();
 const route = useRoute();
+const router = useRouter();
 
 const newMessage = ref('');
 const isPeopleListOpen = ref(false);
@@ -74,52 +75,40 @@ const openPeopleList = () => {
   isPeopleListOpen.value = true;
 };
 
-
-// const route = useRoute()
 const checkForCommand = () => {
   const message = newMessage.value;
 
   if (message.substring(0, 5) === '/join') {
     const parameter = message.substring(5).split(' ');
     const name = parameter[1];
-    
     if (parameter[2] == 'public') {
       chatStore.addChatRoom(name, 'public');
-    }
-    else{
+    } else {
       chatStore.addChatRoom(name, 'private');
-
     }
+    const newRoomId = chatStore.chatRooms[chatStore.chatRooms.length - 1].id;
+    router.push(`/chat/${newRoomId}`);
     newMessage.value = '';
-    
     return true;
   } else if (message.substring(0, 5) === '/list') {
     openPeopleList();
     newMessage.value = '';
     return true;
-  }
-  else if (message.substring(0, 5) === '/quit') {
-    chatStore.removeChatRoom(parseInt(route.params.id as string, 10))
+  } else if (message.substring(0, 5) === '/quit') {
+    chatStore.removeChatRoom(parseInt(route.params.id as string, 10));
     newMessage.value = '';
     return true;
-  }
-  else if (message.substring(0, 7) === '/cancel') {
-    chatStore.removeChatRoom(parseInt(route.params.id as string, 10))
+  } else if (message.substring(0, 7) === '/cancel') {
+    chatStore.removeChatRoom(parseInt(route.params.id as string, 10));
     newMessage.value = '';
     return true;
-  }
-  else if (message.substring(0, 7) === '/invite') {
-    
+  } else if (message.substring(0, 7) === '/invite') {
     newMessage.value = '';
     return true;
-  }
-  else if (message.substring(0, 7) === '/revoke') {
-   
+  } else if (message.substring(0, 7) === '/revoke') {
     newMessage.value = '';
     return true;
-  }
-  else if (message.substring(0, 5) === '/kick') {
-    
+  } else if (message.substring(0, 5) === '/kick') {
     newMessage.value = '';
     return true;
   }

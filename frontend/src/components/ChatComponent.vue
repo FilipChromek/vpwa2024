@@ -29,16 +29,18 @@ import { Message } from 'components/models';
 import { QInfiniteScrollProps } from 'quasar';
 import { useChatStore } from 'stores/store';
 import { useRoute } from 'vue-router';
-const props = defineProps<{
+
+defineProps<{
   messages: Message[];
 }>();
 
 const chatContainer = ref<HTMLElement | null>(null);
 const chatStore = useChatStore();
 const route = useRoute();
+
 const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
-  setTimeout(() => done(false), 500);
-  chatStore.lazyLoadMessages( parseInt(route.params.id as string, 10));
+  setTimeout(() => done(false), 1500);
+  chatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
 };
 
 const scrollToBottom = () => {
@@ -50,9 +52,12 @@ const scrollToBottom = () => {
 };
 
 watch(
-  () => props.messages,
-  () => {
-    scrollToBottom();
+  () => chatStore.newMessageFlag,
+  (newMessageFlag) => {
+    if (newMessageFlag) {
+      scrollToBottom();
+      chatStore.newMessageFlag = false;
+    }
   },
   { deep: true }
 );

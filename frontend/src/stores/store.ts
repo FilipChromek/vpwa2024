@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import { Message, Room, User } from 'components/models';
 
 export const useChatStore = defineStore('chatStore', () => {
+  const newMessageFlag = ref(false);
+
   const chatRooms = ref<Room[]>([
     {
       id: 1,
@@ -326,10 +328,10 @@ export const useChatStore = defineStore('chatStore', () => {
   ]);
 
   const people = ref<User[]>([
-    { id: 1, name: 'Adam Kačmár' },
-    { id: 2, name: 'Filip Chromek' },
-    { id: 3, name: 'Ľubomír Tkač' },
-    { id: 4, name: 'Július Pénzeš' },
+    { id: 1, name: 'Adam Kačmár', nickname: 'adamkatchee' },
+    { id: 2, name: 'Filip Chromek', nickname: 'filipchromek11' },
+    { id: 3, name: 'Ľubomír Tkač', nickname: 'pocerpadlo' },
+    { id: 4, name: 'Július Pénzeš', nickname: 'trenerrumunska' },
   ]);
 
   const sendMessage = (message: string, room_id: number) => {
@@ -344,6 +346,7 @@ export const useChatStore = defineStore('chatStore', () => {
         isSent: true,
       };
       selectedChatRoom.messages.push(newMessage);
+      newMessageFlag.value = true;
     } else {
       console.error('Room with this id not found.');
     }
@@ -372,38 +375,33 @@ export const useChatStore = defineStore('chatStore', () => {
     );
   }; // TODO tu este treba routing ak je tento chat momentalne na ChatPage
 
-  const lazyLoadMessages = (roomId:number) =>{
+  const lazyLoadMessages = (roomId: number) => {
     const offset = 10;
-    const selectedChatRoom = chatRooms.value.find(
-      (room) => room.id === roomId
-    );
-    if (selectedChatRoom){
-      const pocet_sprav = selectedChatRoom.messages.length;
-      for(let i = pocet_sprav; i<pocet_sprav+offset;i++ ){
+    const selectedChatRoom = chatRooms.value.find((room) => room.id === roomId);
+    if (selectedChatRoom) {
+      const numberOfMessages = selectedChatRoom.messages.length;
+      for (let i = numberOfMessages; i < numberOfMessages + offset; i++) {
         const newMessage: Message = {
           name: 'Me',
           text: [`Hey there! ${i}`],
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           isSent: true,
-        }
-        selectedChatRoom.messages= [newMessage,...selectedChatRoom.messages];
-
+        };
+        selectedChatRoom.messages = [newMessage, ...selectedChatRoom.messages];
       }
-
     }
-    
+    newMessageFlag.value = false;
+  };
 
-  }
-  
   return {
     chatRooms,
     pendingRooms,
     people,
+    newMessageFlag,
     addChatRoom,
     removeChatRoom,
     removePendingChatRoom,
     sendMessage,
-    lazyLoadMessages
-   
+    lazyLoadMessages,
   };
 });

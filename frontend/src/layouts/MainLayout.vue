@@ -61,7 +61,8 @@
 
         <q-card-section>
           <p>
-            /join channelName [ private | public ] - Creates a new channel or joins channel
+            /join channelName [ private | public ] - Creates a new channel or
+            joins channel
             <br />
             /cancel - Leave this chat room
             <br />
@@ -74,7 +75,6 @@
             /kick nickName - Kicks user from channel
             <br />
             /quit - Delete this channel
-            
           </p>
         </q-card-section>
 
@@ -92,10 +92,9 @@ import TerminalComponent from 'components/TerminalComponent.vue';
 import ChatRoomsComponent from 'components/ChatRoomsComponent.vue';
 import StatusComponent from 'components/StatusComponent.vue';
 
-
 const headerMenu = ref(false);
 const leftDrawerOpen = ref(false);
-const isCommandDialogVisible = ref(false); // Dialog visibility control
+const isCommandDialogVisible = ref(false);
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -116,13 +115,11 @@ const checkUser = () => {
   const user = localStorage.getItem('user');
   if (!user) {
     window.location.href = '/auth/login';
+  } else {
+    const parsedUser = JSON.parse(user);
+    console.log(parsedUser);
   }
-  else{
-  const parsedUser = JSON.parse(user);
-  console.log(parsedUser);
-  }
-
-}
+};
 checkUser();
 </script>
 

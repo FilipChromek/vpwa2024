@@ -15,6 +15,7 @@ export interface Room {
 export interface User {
   id: number;
   name: string;
+  nickname: string;
 }
 
 export interface Meta {

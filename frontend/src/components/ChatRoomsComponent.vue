@@ -53,7 +53,7 @@
       <q-separator spaced />
     </q-list>
 
-    <q-dialog v-model="isAddPrivateChatDialogOpen" persistent>
+    <q-dialog v-model="isAddPrivateChatDialogOpen">
       <q-card>
         <q-card-section>
           <div class="text-h6">Add New Private Chat</div>
@@ -75,7 +75,7 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="isAddPublicChatDialogOpen" persistent>
+    <q-dialog v-model="isAddPublicChatDialogOpen">
       <q-card>
         <q-card-section>
           <div class="text-h6">Add New Public Chat</div>
