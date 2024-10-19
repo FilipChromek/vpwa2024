@@ -39,8 +39,10 @@ const chatStore = useChatStore();
 const route = useRoute();
 
 const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
-  setTimeout(() => done(false), 1500);
-  chatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
+  setTimeout(() => {
+    chatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
+    done(false);
+  }, 1500);
 };
 
 const scrollToBottom = () => {
