@@ -8,7 +8,7 @@
         <template v-for="room in pendingRooms" :key="room.id">
           <chat-room
             :room="room"
-            @remove="chatStore.removePendingChatRoom(room.id)"
+            @remove="chatStore.removePendingChatRoom(room.id, router)"
           ></chat-room>
         </template>
       </template>
@@ -26,7 +26,7 @@
       <template v-for="room in privateChatRooms" :key="room.id">
         <chat-room
           :room="room"
-          @remove="chatStore.removeChatRoom(room.id)"
+          @remove="chatStore.removeChatRoom(room.id, router)"
         ></chat-room>
       </template>
 
@@ -46,7 +46,7 @@
       <template v-for="room in publicChatRooms" :key="room.id">
         <chat-room
           :room="room"
-          @remove="chatStore.removeChatRoom(room.id)"
+          @remove="chatStore.removeChatRoom(room.id, router)"
         ></chat-room>
       </template>
 
@@ -103,8 +103,10 @@
 import ChatRoom from 'components/ChatRoom.vue';
 import { ref, computed } from 'vue';
 import { useChatStore } from 'stores/store';
+import { useRouter } from 'vue-router';
 
 const chatStore = useChatStore();
+const router = useRouter();
 
 const pendingRooms = computed(() => chatStore.pendingRooms);
 
@@ -132,7 +134,7 @@ const openAddPublicChatDialog = () => {
 
 const addPrivateChatRoom = () => {
   if (newPrivateChatRoomName.value.trim()) {
-    chatStore.addChatRoom(newPrivateChatRoomName.value, 'private');
+    chatStore.addChatRoom(newPrivateChatRoomName.value, 'private', router);
     newPrivateChatRoomName.value = '';
     isAddPrivateChatDialogOpen.value = false;
   }
@@ -140,7 +142,7 @@ const addPrivateChatRoom = () => {
 
 const addPublicChatRoom = () => {
   if (newPublicChatRoomName.value.trim()) {
-    chatStore.addChatRoom(newPublicChatRoomName.value, 'public');
+    chatStore.addChatRoom(newPublicChatRoomName.value, 'public', router);
     newPublicChatRoomName.value = '';
     isAddPublicChatDialogOpen.value = false;
   }

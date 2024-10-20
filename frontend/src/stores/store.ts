@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { Message, Room, User } from 'components/models';
+import { Router } from 'vue-router';
 
 export const useChatStore = defineStore('chatStore', () => {
   const newMessageFlag = ref(false);
@@ -354,7 +355,8 @@ export const useChatStore = defineStore('chatStore', () => {
 
   const addChatRoom = (
     roomName: string,
-    type: 'private' | 'public' = 'private'
+    type: 'private' | 'public' = 'private',
+    router: Router
   ) => {
     const newRoom: Room = {
       id: chatRooms.value.length + 1,
@@ -362,18 +364,37 @@ export const useChatStore = defineStore('chatStore', () => {
       type,
       messages: [],
     };
+
     chatRooms.value.push(newRoom);
+
+    router.push({
+      path: `/chat/${newRoom.id}`,
+    });
   };
 
-  const removeChatRoom = (roomId: number) => {
+  const removeChatRoom = (roomId: number, router: Router) => {
     chatRooms.value = chatRooms.value.filter((room) => room.id !== roomId);
-  }; // TODO tu este treba routing ak je tento chat momentalne na ChatPage
+    const currentRoomId = parseInt(
+      router.currentRoute.value.params.id as string,
+      10
+    );
+    if (currentRoomId === roomId) {
+      router.push({ path: '/' });
+    }
+  };
 
-  const removePendingChatRoom = (roomId: number) => {
+  const removePendingChatRoom = (roomId: number, router: Router) => {
     pendingRooms.value = pendingRooms.value.filter(
       (room) => room.id !== roomId
     );
-  }; // TODO tu este treba routing ak je tento chat momentalne na ChatPage
+    const currentRoomId = parseInt(
+      router.currentRoute.value.params.id as string,
+      10
+    );
+    if (currentRoomId === roomId) {
+      router.push({ path: '/' });
+    }
+  };
 
   const lazyLoadMessages = (roomId: number) => {
     const offset = 10;

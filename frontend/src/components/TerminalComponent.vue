@@ -22,7 +22,12 @@
       </template>
     </q-input>
 
-    <q-menu v-model="isUserListOpen" no-focus no-parent-event anchor="bottom left">
+    <q-menu
+      v-model="isUserListOpen"
+      no-focus
+      no-parent-event
+      anchor="bottom left"
+    >
       <q-list>
         <q-item
           v-for="(person, index) in filteredPeople"
@@ -155,9 +160,9 @@ const checkForCommand = () => {
     const parameter = message.substring(5).split(' ');
     const name = parameter[1];
     if (parameter[2] == 'public') {
-      chatStore.addChatRoom(name, 'public');
+      chatStore.addChatRoom(name, 'public', router);
     } else {
-      chatStore.addChatRoom(name, 'private');
+      chatStore.addChatRoom(name, 'private', router);
     }
     const newRoomId = chatStore.chatRooms[chatStore.chatRooms.length - 1].id;
     router.push(`/chat/${newRoomId}`);
@@ -168,11 +173,11 @@ const checkForCommand = () => {
     newMessage.value = '';
     return true;
   } else if (message.substring(0, 5) === '/quit') {
-    chatStore.removeChatRoom(parseInt(route.params.id as string, 10));
+    chatStore.removeChatRoom(parseInt(route.params.id as string, 10), router);
     newMessage.value = '';
     return true;
   } else if (message.substring(0, 7) === '/cancel') {
-    chatStore.removeChatRoom(parseInt(route.params.id as string, 10));
+    chatStore.removeChatRoom(parseInt(route.params.id as string, 10), router);
     newMessage.value = '';
     return true;
   } else if (message.substring(0, 7) === '/invite') {
