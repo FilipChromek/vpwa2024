@@ -22,7 +22,7 @@
       </template>
     </q-input>
 
-    <q-menu v-model="isUserListOpen" no-focus anchor="bottom left">
+    <q-menu v-model="isUserListOpen" no-focus no-parent-event anchor="bottom left">
       <q-list>
         <q-item
           v-for="(person, index) in filteredPeople"

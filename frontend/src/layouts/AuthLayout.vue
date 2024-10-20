@@ -36,7 +36,7 @@
   }
 
   .obrazok {
-    height: 50vh; /* Adjust image size on small screens */
+    height: 50vh;
   }
 }
 </style>
