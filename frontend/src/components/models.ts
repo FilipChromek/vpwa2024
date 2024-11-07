@@ -10,7 +10,7 @@ export interface Room {
   name: string;
   type: string;
   messages: Message[];
-} // type ze by som dal typescriptovy enum
+}
 
 export interface User {
   id: number;
