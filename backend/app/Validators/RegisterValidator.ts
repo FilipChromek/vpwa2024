@@ -40,11 +40,11 @@ export default class RegisterValidator {
     lastName: schema.string({}, [
       rules.trim()
     ]),
-    nickname: schema.string({}, [
+    username: schema.string({}, [
       rules.trim(),
       rules.unique({
         table: 'users',
-        column: 'nickname',
+        column: 'username',
       })
     ]),
   })
@@ -73,7 +73,7 @@ export default class RegisterValidator {
 
     'lastName.required': 'Last name is required for registration',
 
-    'nickname.required': 'Nickname is required for registration',
-    'nickname.unique': 'This nickname is already taken',
+    'username.required': 'Username is required for registration',
+    'username.unique': 'This username is already taken',
   }
 }

@@ -3,13 +3,13 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Hash from "@ioc:Adonis/Core/Hash";
 
 class AuthService {
-  public async register(data: { email: string; password: string, firstName: string, lastName: string, nickname: string }, auth: HttpContextContract['auth']) {
+  public async register(data: { email: string; password: string, firstName: string, lastName: string, username: string }, auth: HttpContextContract['auth']) {
     const user = await User.create({
       email: data.email,
       password: data.password,
       firstName: data.firstName,
       lastName: data.lastName,
-      nickname: data.nickname,
+      username: data.username,
     })
 
     const token = await auth.use('api').generate(user)

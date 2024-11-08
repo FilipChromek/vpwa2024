@@ -329,10 +329,10 @@ export const useChatStore = defineStore('chatStore', () => {
   ]);
 
   const people = ref<User[]>([
-    { id: 1, name: 'Adam Kačmár', nickname: 'adamkatchee' },
-    { id: 2, name: 'Filip Chromek', nickname: 'filipchromek11' },
-    { id: 3, name: 'Ľubomír Tkač', nickname: 'pocerpadlo' },
-    { id: 4, name: 'Július Pénzeš', nickname: 'trenerrumunska' },
+    { id: 1, name: 'Adam Kačmár', username: 'adamkatchee' },
+    { id: 2, name: 'Filip Chromek', username: 'filipchromek11' },
+    { id: 3, name: 'Ľubomír Tkač', username: 'pocerpadlo' },
+    { id: 4, name: 'Július Pénzeš', username: 'trenerrumunska' },
   ]);
 
   const sendMessage = (message: string, room_id: number) => {

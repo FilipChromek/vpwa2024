@@ -6,6 +6,7 @@ import AuthService from "App/Services/AuthService";
 export default class AuthController {
   async register({ request, auth, response }: HttpContextContract) {
     const payload = await request.validate(RegisterValidator)
+    console.log("Data received from frontend:", payload);
 
     try {
       const result = await AuthService.register(payload, auth)

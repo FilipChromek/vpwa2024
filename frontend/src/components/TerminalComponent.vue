@@ -37,7 +37,7 @@
           @click="tagPerson(person.name)"
         >
           <q-item-section>{{
-            person.name + ' (@' + person.nickname + ')'
+            person.name + ' (@' + person.username + ')'
           }}</q-item-section>
         </q-item>
       </q-list>
