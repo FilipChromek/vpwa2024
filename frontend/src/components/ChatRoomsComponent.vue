@@ -23,7 +23,11 @@
           @click="openAddPrivateChatDialog"
         />
       </div>
-      <template v-for="channel in privateChannels" :key="channel.id">
+
+      <template
+        v-for="channel in channelStore.privateChannels"
+        :key="channel.id"
+      >
         <chat-room
           :channel="channel"
           @remove="chatStore.removeChatRoom(channel.id, router)"
@@ -43,7 +47,10 @@
           @click="openAddPublicChatDialog"
         />
       </div>
-      <template v-for="channel in publicChannels" :key="channel.id">
+      <template
+        v-for="channel in channelStore.publicChannels"
+        :key="channel.id"
+      >
         <chat-room
           :channel="channel"
           @remove="chatStore.removeChatRoom(channel.id, router)"
@@ -115,9 +122,6 @@ onMounted(() => {
 });
 
 const pendingRooms = []; // computed(() => chatStore.pendingRooms);
-
-const privateChannels = channelStore.privateChannels;
-const publicChannels = channelStore.publicChannels;
 
 const isAddPrivateChatDialogOpen = ref(false);
 const newPrivateChatRoomName = ref('');

@@ -3,13 +3,14 @@ import { api } from 'boot/axios';
 import { computed, ref } from 'vue';
 import { Channel } from 'components/models';
 export const useChannelStore = defineStore('channelStore', () => {
-  const channels = ref<Channel[]>([]); // Explicitly type as Channel[]
+  const channels = ref<Channel[]>([]);
   const pendingChannels = ref([]);
 
   const loadChannels = async () => {
     try {
       const response = await api.get('/api/channels');
-      channels.value = response.data.channels;
+      channels.value = response.data;
+      console.log(channels.value);
     } catch (error) {
       console.error(error);
     }
@@ -24,11 +25,12 @@ export const useChannelStore = defineStore('channelStore', () => {
     }
   };
 
-  const privateChannels = computed(() =>
-    channels.value.filter((channel) => channel.isPrivate)
-  );
   const publicChannels = computed(() =>
     channels.value.filter((channel) => !channel.isPrivate)
+  );
+
+  const privateChannels = computed(() =>
+    channels.value.filter((channel) => channel.isPrivate)
   );
 
   return {
