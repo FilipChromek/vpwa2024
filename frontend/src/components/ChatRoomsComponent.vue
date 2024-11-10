@@ -5,10 +5,10 @@
         <div class="flex flex-row justify-between q-px-md">
           <h3 class="text-subtitle2">Invitations</h3>
         </div>
-        <template v-for="room in pendingRooms" :key="room.id">
+        <template v-for="channel in pendingRooms" :key="channel.id">
           <chat-room
-            :channel="room"
-            @remove="chatStore.removePendingChatRoom(room.id, router)"
+            :channel="channel"
+            @remove="chatStore.removePendingChatRoom(channel.id, router)"
           ></chat-room>
         </template>
       </template>
@@ -101,7 +101,7 @@
 
 <script setup lang="ts">
 import ChatRoom from 'components/ChatRoom.vue';
-import { computed, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useChatStore } from 'stores/store';
 import { useRouter } from 'vue-router';
 import { useChannelStore } from 'stores/channelStore';
@@ -114,24 +114,25 @@ onMounted(() => {
   channelStore.loadChannels();
 });
 
-const pendingRooms = computed(() => chatStore.pendingRooms);
+const pendingRooms = []; // computed(() => chatStore.pendingRooms);
 
 const privateChannels = channelStore.privateChannels;
 const publicChannels = channelStore.publicChannels;
 
-// const isAddPrivateChatDialogOpen = ref(false);
-// const newPrivateChatRoomName = ref('');
-//
-// const isAddPublicChatDialogOpen = ref(false);
-// const newPublicChatRoomName = ref('');
-//
-// const openAddPrivateChatDialog = () => {
-//   isAddPrivateChatDialogOpen.value = true;
-// };
-//
-// const openAddPublicChatDialog = () => {
-//   isAddPublicChatDialogOpen.value = true;
-// };
+const isAddPrivateChatDialogOpen = ref(false);
+const newPrivateChatRoomName = ref('');
+
+const isAddPublicChatDialogOpen = ref(false);
+const newPublicChatRoomName = ref('');
+
+const openAddPrivateChatDialog = () => {
+  isAddPrivateChatDialogOpen.value = true;
+};
+
+const openAddPublicChatDialog = () => {
+  isAddPublicChatDialogOpen.value = true;
+};
+
 //
 // const addPrivateChatRoom = () => {
 //   if (newPrivateChatRoomName.value.trim()) {

@@ -28,28 +28,17 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { api } from 'boot/axios';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
+import { useAuthStore } from 'stores/authStore';
 
 const email = ref('');
 const password = ref('');
+const authStore = useAuthStore();
 
 const login = async () => {
-  const form = {
-    email: email.value,
-    password: password.value,
-  };
-
   try {
-    const response = await api.post('login', form);
-    const { token } = response.data;
-    localStorage.setItem('authToken', token.token);
-
-    router.push('/');
+    await authStore.login({ email: email.value, password: password.value });
   } catch (error) {
-    console.error(error);
+    console.error('Login failed:', error);
   }
 };
 </script>

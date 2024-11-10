@@ -10,6 +10,7 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const authStore = useAuthStore();
+  console.log(authStore.token);
   if (authStore.token) {
     config.headers.Authorization = `Bearer ${authStore.token}`;
   }
@@ -19,12 +20,10 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response, // Pass successful responses through unchanged
   (error) => {
-    const authStore = useAuthStore();
     const router = useRouter();
 
     // Check if error status is 401 (unauthorized)
     if (error.response?.status === 401) {
-      authStore.logout(); // Clear auth state on 401
       router.push({ name: 'login' }); // Redirect to login page
     }
 

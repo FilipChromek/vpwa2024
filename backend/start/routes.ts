@@ -36,5 +36,5 @@ Route.group(() => {
   Route.post('/channels', 'ChannelsController.store').middleware('auth')
 }).prefix('api')
 
-Route.get('/api/current-user', 'AuthController.currentUser')
+Route.get('/api/current-user', 'AuthController.currentUser').middleware('auth')
 

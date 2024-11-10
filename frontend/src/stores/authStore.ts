@@ -7,16 +7,19 @@ export const useAuthStore = defineStore('auth', () => {
   const router = useRouter();
   const isAuthenticated = ref(false);
   const user = ref(null);
-  const token = ref<string | null>(null);
+  const token = ref<string | null>(localStorage.getItem('token'));
 
-  // TODO toto tu dorobit
+  // TODO tu presunut registraciu
   const login = async (credentials: { email: string; password: string }) => {
     try {
       const response = await api.post('/login', credentials);
-      token.value = response.data.token;
+      token.value = response.data.token.token;
       user.value = response.data.user;
+      console.log(token.value);
       isAuthenticated.value = true;
-      router.push('/'); // Redirect to the dashboard or main page
+      localStorage.setItem('token', token.value!);
+      api.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+      router.push('/');
     } catch (error) {
       console.error('Login failed:', error);
     }

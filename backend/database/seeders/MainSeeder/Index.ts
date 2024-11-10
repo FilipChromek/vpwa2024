@@ -7,5 +7,6 @@ export default class extends BaseSeeder {
   public async run () {
     await this.runSeeder(await import('../UserSeeder'))
     await this.runSeeder(await import('../ChannelSeeder'))
+    await this.runSeeder(await import('../ChannelUserSeeder'))
   }
 }
