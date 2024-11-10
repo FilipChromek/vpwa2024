@@ -22,7 +22,7 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
   return { hello: 'world' }
-})
+}).middleware('auth')
 
 Route.post('/register', 'AuthController.register')
 Route.post('/login', 'AuthController.login')
@@ -30,3 +30,11 @@ Route.post('/login', 'AuthController.login')
 Route.group(() => {
   Route.post('/logout', 'AuthController.logout')
 }).middleware('auth')
+
+Route.group(() => {
+  Route.get('/channels', 'ChannelsController.index').middleware('auth')
+  Route.post('/channels', 'ChannelsController.store').middleware('auth')
+}).prefix('api')
+
+Route.get('/api/current-user', 'AuthController.currentUser')
+

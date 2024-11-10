@@ -5,6 +5,12 @@ export interface Message {
   isSent: boolean;
 }
 
+export interface Channel {
+  id: number;
+  name: string;
+  isPrivate: boolean;
+}
+
 export interface Room {
   id: number;
   name: string;

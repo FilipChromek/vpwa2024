@@ -3,14 +3,14 @@
     clickable
     v-ripple
     tag="router-link"
-    :to="`/chat/${room.id}`"
+    :to="`/chat/${channel.id}`"
     class="full-width"
   >
     <q-item-section avatar>
       <q-icon name="chat" />
     </q-item-section>
     <q-item-section>
-      {{ room.name }}
+      {{ channel.name }}
     </q-item-section>
     <q-btn dense flat round icon="more_vert" @click.stop.prevent>
       <q-menu v-model="chatMenu">
@@ -35,10 +35,10 @@
 
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue';
-import { Room } from 'components/models';
+import { Channel } from 'components/models';
 
-const { room } = defineProps<{
-  room: Room;
+const { channel } = defineProps<{
+  channel: Channel;
 }>();
 
 const emit = defineEmits(['remove']);
@@ -46,7 +46,7 @@ const chatMenu = ref(false);
 
 const leaveChatRoom = () => {
   chatMenu.value = !chatMenu.value;
-  emit('remove', room);
+  emit('remove', channel);
 };
 </script>
 

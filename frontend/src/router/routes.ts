@@ -5,8 +5,16 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') },
-      { path: 'chat/:id', component: () => import('pages/ChatPage.vue') },
+      {
+        path: '',
+        component: () => import('pages/IndexPage.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'chat/:id',
+        component: () => import('pages/ChatPage.vue'),
+        meta: { requiresAuth: true },
+      },
     ],
   },
   {

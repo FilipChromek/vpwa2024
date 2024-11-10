@@ -28,15 +28,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import axios from 'axios';
+import { api } from 'boot/axios';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
 const email = ref('');
 const password = ref('');
-
-axios.defaults.baseURL = 'http://localhost:3333';
 
 const login = async () => {
   const form = {
@@ -45,7 +43,7 @@ const login = async () => {
   };
 
   try {
-    const response = await axios.post('login', form);
+    const response = await api.post('login', form);
     const { token } = response.data;
     localStorage.setItem('authToken', token.token);
 

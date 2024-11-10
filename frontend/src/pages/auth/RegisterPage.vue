@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import { api } from 'boot/axios';
 
 const router = useRouter();
 
@@ -65,8 +65,6 @@ const password = ref('');
 const firstName = ref('');
 const lastName = ref('');
 const email = ref('');
-
-axios.defaults.baseURL = 'http://localhost:3333';
 
 const register = async () => {
   const form = {
@@ -80,7 +78,7 @@ const register = async () => {
   console.log('Form data being sent:', form);
 
   try {
-    const response = await axios.post('register', form);
+    const response = await api.post('register', form);
     const { token } = response.data;
     localStorage.setItem('authToken', token.token);
 

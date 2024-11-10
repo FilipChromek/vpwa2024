@@ -7,7 +7,7 @@
         </div>
         <template v-for="room in pendingRooms" :key="room.id">
           <chat-room
-            :room="room"
+            :channel="room"
             @remove="chatStore.removePendingChatRoom(room.id, router)"
           ></chat-room>
         </template>
@@ -23,10 +23,10 @@
           @click="openAddPrivateChatDialog"
         />
       </div>
-      <template v-for="room in privateChatRooms" :key="room.id">
+      <template v-for="channel in privateChannels" :key="channel.id">
         <chat-room
-          :room="room"
-          @remove="chatStore.removeChatRoom(room.id, router)"
+          :channel="channel"
+          @remove="chatStore.removeChatRoom(channel.id, router)"
         ></chat-room>
       </template>
 
@@ -43,10 +43,10 @@
           @click="openAddPublicChatDialog"
         />
       </div>
-      <template v-for="room in publicChatRooms" :key="room.id">
+      <template v-for="channel in publicChannels" :key="channel.id">
         <chat-room
-          :room="room"
-          @remove="chatStore.removeChatRoom(room.id, router)"
+          :channel="channel"
+          @remove="chatStore.removeChatRoom(channel.id, router)"
         ></chat-room>
       </template>
 
@@ -101,52 +101,53 @@
 
 <script setup lang="ts">
 import ChatRoom from 'components/ChatRoom.vue';
-import { ref, computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useChatStore } from 'stores/store';
 import { useRouter } from 'vue-router';
+import { useChannelStore } from 'stores/channelStore';
 
 const chatStore = useChatStore();
+const channelStore = useChannelStore();
 const router = useRouter();
+
+onMounted(() => {
+  channelStore.loadChannels();
+});
 
 const pendingRooms = computed(() => chatStore.pendingRooms);
 
-const privateChatRooms = computed(() =>
-  chatStore.chatRooms.filter((room) => room.type === 'private')
-);
+const privateChannels = channelStore.privateChannels;
+const publicChannels = channelStore.publicChannels;
 
-const publicChatRooms = computed(() =>
-  chatStore.chatRooms.filter((room) => room.type === 'public')
-);
-
-const isAddPrivateChatDialogOpen = ref(false);
-const newPrivateChatRoomName = ref('');
-
-const isAddPublicChatDialogOpen = ref(false);
-const newPublicChatRoomName = ref('');
-
-const openAddPrivateChatDialog = () => {
-  isAddPrivateChatDialogOpen.value = true;
-};
-
-const openAddPublicChatDialog = () => {
-  isAddPublicChatDialogOpen.value = true;
-};
-
-const addPrivateChatRoom = () => {
-  if (newPrivateChatRoomName.value.trim()) {
-    chatStore.addChatRoom(newPrivateChatRoomName.value, 'private', router);
-    newPrivateChatRoomName.value = '';
-    isAddPrivateChatDialogOpen.value = false;
-  }
-};
-
-const addPublicChatRoom = () => {
-  if (newPublicChatRoomName.value.trim()) {
-    chatStore.addChatRoom(newPublicChatRoomName.value, 'public', router);
-    newPublicChatRoomName.value = '';
-    isAddPublicChatDialogOpen.value = false;
-  }
-};
+// const isAddPrivateChatDialogOpen = ref(false);
+// const newPrivateChatRoomName = ref('');
+//
+// const isAddPublicChatDialogOpen = ref(false);
+// const newPublicChatRoomName = ref('');
+//
+// const openAddPrivateChatDialog = () => {
+//   isAddPrivateChatDialogOpen.value = true;
+// };
+//
+// const openAddPublicChatDialog = () => {
+//   isAddPublicChatDialogOpen.value = true;
+// };
+//
+// const addPrivateChatRoom = () => {
+//   if (newPrivateChatRoomName.value.trim()) {
+//     chatStore.addChatRoom(newPrivateChatRoomName.value, 'private', router);
+//     newPrivateChatRoomName.value = '';
+//     isAddPrivateChatDialogOpen.value = false;
+//   }
+// };
+//
+// const addPublicChatRoom = () => {
+//   if (newPublicChatRoomName.value.trim()) {
+//     chatStore.addChatRoom(newPublicChatRoomName.value, 'public', router);
+//     newPublicChatRoomName.value = '';
+//     isAddPublicChatDialogOpen.value = false;
+//   }
+// };
 </script>
 
 <style scoped></style>

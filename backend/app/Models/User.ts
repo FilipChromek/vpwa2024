@@ -4,15 +4,15 @@ import { column, beforeSave, BaseModel, hasMany, HasMany, manyToMany, ManyToMany
 import Channel from "App/Models/Channel";
 import Message from "App/Models/Message";
 
+export enum UserStatus {
+  ONLINE = 'online',
+  OFFLINE = 'offline',
+  DND = 'DND',
+}
+
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
-
-  @column()
-  public email: string
-
-  @column({ serializeAs: null })
-  public password: string
 
   @column()
   public firstName: string
@@ -23,16 +23,35 @@ export default class User extends BaseModel {
   @column()
   public username: string
 
+  @column()
+  public email: string
+
+  @column({ serializeAs: null })
+  public password: string
+
+  @column({
+    consume: (value: string) => value as UserStatus
+  })
+  public status: UserStatus
+
+  @column()
+  public notifications: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @hasMany(() => Message, {
+  @hasMany(() => Channel, {
     foreignKey: 'createdBy',
   })
-  public sentMessages: HasMany<typeof Message>
+  public createdChannels: HasMany<typeof Channel>
+
+  @hasMany(() => Message, {
+    foreignKey: 'userId',
+  })
+  public messages: HasMany<typeof Message>
 
   @manyToMany(() => Channel, {
     pivotTable: 'channel_users',

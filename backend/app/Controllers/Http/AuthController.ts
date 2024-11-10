@@ -31,4 +31,12 @@ export default class AuthController {
     await AuthService.logout(auth)
     return response.ok({message: 'Logged out successfully'})
   }
+
+  public async currentUser({ auth, response }: HttpContextContract) {
+    if (auth.user) {
+      return response.ok({ user: auth.user })
+    } else {
+      return response.unauthorized({ message: 'No user logged in' })
+    }
+  }
 }

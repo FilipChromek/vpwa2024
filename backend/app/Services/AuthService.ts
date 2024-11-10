@@ -1,5 +1,5 @@
-import User from 'App/Models/User'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import User, {UserStatus} from 'App/Models/User'
+import {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import Hash from "@ioc:Adonis/Core/Hash";
 
 class AuthService {
@@ -10,6 +10,7 @@ class AuthService {
       firstName: data.firstName,
       lastName: data.lastName,
       username: data.username,
+      status: UserStatus.OFFLINE,
     })
 
     const token = await auth.use('api').generate(user)
@@ -22,11 +23,20 @@ class AuthService {
       throw new Error('Invalid credentials')
     }
 
+    user.status = UserStatus.ONLINE
+    await user.save()
+
     const token = await auth.use('api').generate(user)
     return { user, token }
   }
 
   public async logout(auth: HttpContextContract['auth']) {
+    const user = await auth.user
+    if (user){
+      user.status = UserStatus.OFFLINE
+      await user.save()
+    }
+
     await auth.use('api').logout()
   }
 }

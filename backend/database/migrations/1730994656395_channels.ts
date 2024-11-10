@@ -7,8 +7,9 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('name').notNullable().unique()
-      table.integer('owner_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
-
+      table.integer('created_by').unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.boolean('is_private').defaultTo(false)
+      table.timestamp('last_activity', { useTz: true })
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
