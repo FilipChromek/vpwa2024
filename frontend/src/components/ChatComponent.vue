@@ -13,9 +13,9 @@
         <q-chat-message
           v-for="(message, index) in messages"
           :key="index"
-          :name="message.id"
-          :text="message.content"
-          :sent="message.author.id === currentUserId"
+          :name="message.content"
+          :text="[message.content]"
+          :sent="message.id === currentUserId"
         />
       </q-infinite-scroll>
     </div>
