@@ -6,13 +6,13 @@
 import { onMounted } from 'vue';
 import { useChatStore } from 'stores/chatStore';
 import ChatComponent from 'components/ChatComponent.vue';
-// import { useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const chatStore = useChatStore();
-// const route = useRoute();
+const route = useRoute();
 
 onMounted(() => {
-  // const channelId = parseInt(route.params.id as string, 10);
-  chatStore.loadMessages();
+  const channelId = parseInt(route.params.id as string, 10);
+  chatStore.connectToChannel(channelId);
 });
 </script>

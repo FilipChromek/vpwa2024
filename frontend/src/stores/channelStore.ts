@@ -10,7 +10,7 @@ export const useChannelStore = defineStore('channelStore', () => {
     try {
       const response = await api.get('/api/channels');
       channels.value = response.data;
-      console.log(channels.value);
+      // console.log(channels.value);
     } catch (error) {
       console.error(error);
     }
