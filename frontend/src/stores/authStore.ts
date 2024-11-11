@@ -9,7 +9,24 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref(null);
   const token = ref<string | null>(localStorage.getItem('token'));
 
-  // TODO tu presunut registraciu
+  const register = async (credentials: {
+    firstName: string;
+    lastName: string;
+    username: string;
+    email: string;
+    password: string;
+  }) => {
+    try {
+      const response = await api.post('/register', credentials);
+      token.value = response.data.token.token;
+      user.value = response.data.user;
+      localStorage.setItem('token', token.value!);
+      router.push('/');
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
+  };
+
   const login = async (credentials: { email: string; password: string }) => {
     try {
       const response = await api.post('/login', credentials);
@@ -53,6 +70,7 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     user,
     token,
+    register,
     login,
     logout,
     checkAuthStatus,

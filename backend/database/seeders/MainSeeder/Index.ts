@@ -8,5 +8,6 @@ export default class extends BaseSeeder {
     await this.runSeeder(await import('../UserSeeder'))
     await this.runSeeder(await import('../ChannelSeeder'))
     await this.runSeeder(await import('../ChannelUserSeeder'))
+    await this.runSeeder(await import('../MessageSeeder'))
   }
 }

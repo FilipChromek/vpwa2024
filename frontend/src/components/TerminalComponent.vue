@@ -86,10 +86,10 @@ const scrollToBottom = () => {
 
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useChatStore } from 'stores/store';
+import { useOldChatStore } from 'stores/store';
 import { useRouter } from 'vue-router';
 
-const chatStore = useChatStore();
+const chatStore = useOldChatStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -165,7 +165,7 @@ const checkForCommand = () => {
       chatStore.addChatRoom(name, 'private', router);
     }
     const newRoomId = chatStore.chatRooms[chatStore.chatRooms.length - 1].id;
-    router.push(`/chat/${newRoomId}`);
+    router.push(`/channels/${newRoomId}`);
     newMessage.value = '';
     return true;
   } else if (message.substring(0, 5) === '/list') {

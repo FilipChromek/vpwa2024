@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.integer("created_by").unsigned().references("id").inTable("users").onDelete("CASCADE")
       table.integer("channel_id").unsigned().references("id").inTable("channels").onDelete("CASCADE")
-      table.text("content")
+      table.text("content").notNullable()
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

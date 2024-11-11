@@ -1,8 +1,8 @@
 export interface Message {
-  name: string;
-  text: string[];
-  avatar: string;
-  isSent: boolean;
+  id: number
+  createdBy: string;
+  channelId: string;
+  content: string
 }
 
 export interface Channel {

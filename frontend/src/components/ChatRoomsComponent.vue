@@ -68,7 +68,7 @@
 
         <q-card-section>
           <q-input
-            v-model="newPrivateChatRoomName"
+            v-model="newChannelName"
             rounded
             outlined
             placeholder="Enter chat room name..."
@@ -77,7 +77,12 @@
 
         <q-card-actions align="right">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add" color="primary" @click="addPrivateChatRoom" />
+          <q-btn
+            flat
+            label="Add"
+            color="primary"
+            @click="channelStore.addChannel(newChannelName, true)"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -90,7 +95,7 @@
 
         <q-card-section>
           <q-input
-            v-model="newPublicChatRoomName"
+            v-model="newChannelName"
             rounded
             outlined
             placeholder="Enter chat room name..."
@@ -99,7 +104,12 @@
 
         <q-card-actions align="right">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add" color="primary" @click="addPublicChatRoom" />
+          <q-btn
+            flat
+            label="Add"
+            color="primary"
+            @click="channelStore.addChannel(newChannelName, false)"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -109,11 +119,11 @@
 <script setup lang="ts">
 import ChatRoom from 'components/ChatRoom.vue';
 import { onMounted, ref } from 'vue';
-import { useChatStore } from 'stores/store';
+import { useOldChatStore } from 'stores/store';
 import { useRouter } from 'vue-router';
 import { useChannelStore } from 'stores/channelStore';
 
-const chatStore = useChatStore();
+const chatStore = useOldChatStore();
 const channelStore = useChannelStore();
 const router = useRouter();
 
@@ -124,10 +134,9 @@ onMounted(() => {
 const pendingRooms = []; // computed(() => chatStore.pendingRooms);
 
 const isAddPrivateChatDialogOpen = ref(false);
-const newPrivateChatRoomName = ref('');
-
 const isAddPublicChatDialogOpen = ref(false);
-const newPublicChatRoomName = ref('');
+
+const newChannelName = ref<string>('');
 
 const openAddPrivateChatDialog = () => {
   isAddPrivateChatDialogOpen.value = true;

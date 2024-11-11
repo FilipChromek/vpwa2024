@@ -55,40 +55,27 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { api } from 'boot/axios';
+import { useAuthStore } from 'stores/authStore';
 
-const router = useRouter();
+const authStore = useAuthStore();
 
-const username = ref('');
-const password = ref('');
 const firstName = ref('');
 const lastName = ref('');
+const username = ref('');
 const email = ref('');
+const password = ref('');
 
 const register = async () => {
-  const form = {
-    username: username.value,
-    password: password.value,
-    firstName: firstName.value,
-    lastName: lastName.value,
-    email: email.value,
-  };
-
-  console.log('Form data being sent:', form);
-
   try {
-    const response = await api.post('register', form);
-    const { token } = response.data;
-    localStorage.setItem('authToken', token.token);
-
-    router.push('/');
+    await authStore.register({
+      firstName: firstName.value,
+      lastName: lastName.value,
+      username: username.value,
+      email: email.value,
+      password: password.value,
+    });
   } catch (error) {
-    if (error instanceof Error) {
-      console.error('Registration failed:', error.message);
-    } else {
-      console.error('Registration failed:', error);
-    }
+    console.error('Register failed:', error);
   }
 };
 </script>

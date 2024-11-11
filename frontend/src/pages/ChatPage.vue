@@ -1,21 +1,16 @@
 <template>
-  <chat-component :messages="chatRoomMessages" />
+  <chat-component :messages="chatStore.messages" />
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
-import { useChatStore } from 'stores/store';
+import { onMounted } from 'vue';
+import { useChatStore } from 'stores/chatStore';
 import ChatComponent from 'components/ChatComponent.vue';
 
 const chatStore = useChatStore();
-const route = useRoute();
 
-const chatRoomMessages = computed(() => {
-  const chatRoomId = parseInt(route.params.id as string, 10);
-  const selectedChatRoom = chatStore.chatRooms.find(
-    (room) => room.id === chatRoomId
-  );
-  return selectedChatRoom ? selectedChatRoom.messages : [];
+onMounted(() => {
+  const channelId = parseInt($route.params.id as string, 10);
+  chatStore.connectToChannel(channelId);
 });
 </script>

@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { Message, Room, User } from 'components/models';
 import { Router } from 'vue-router';
 
-export const useChatStore = defineStore('chatStore', () => {
+export const useOldChatStore = defineStore('oldChatStore', () => {
   const newMessageFlag = ref(false);
 
   const chatRooms = ref<Room[]>([
@@ -368,7 +368,7 @@ export const useChatStore = defineStore('chatStore', () => {
     chatRooms.value.push(newRoom);
 
     router.push({
-      path: `/chat/${newRoom.id}`,
+      path: `/channels/${newRoom.id}`,
     });
   };
 

@@ -18,6 +18,7 @@ export const useChannelStore = defineStore('channelStore', () => {
 
   const addChannel = async (name: string, isPrivate: boolean) => {
     try {
+      console.log('Adding channel:', name, isPrivate);
       await api.post('/api/channels', { name, isPrivate });
       await loadChannels();
     } catch (error) {

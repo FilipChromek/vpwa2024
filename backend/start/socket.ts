@@ -20,3 +20,11 @@ Ws.namespace('/')
     console.log('websocket greeted: ', socket.id, msg)
     return 'hi'
   })
+
+Ws.namespace("channels/:id")
+  // .middleware('channel') // check if user can join given channel
+  // .connected(({ socket, params }) => {
+  //     console.log(`User connected to channel: ${params.id} with socket ID: ${socket.id}`);
+  //   })
+  .on("loadMessages", "ChatsController.loadMessages")
+  .on("addMessage", "ChatsController.addMessage");

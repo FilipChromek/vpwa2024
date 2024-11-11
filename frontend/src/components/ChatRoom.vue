@@ -3,7 +3,7 @@
     clickable
     v-ripple
     tag="router-link"
-    :to="`/chat/${channel.id}`"
+    :to="`/channels/${channel.id}`"
     class="full-width"
   >
     <q-item-section avatar>

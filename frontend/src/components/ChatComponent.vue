@@ -13,10 +13,9 @@
         <q-chat-message
           v-for="(message, index) in messages"
           :key="index"
-          :name="message.name"
-          :text="message.text"
-          :avatar="message.avatar"
-          :sent="message.isSent"
+          :name="message.id"
+          :text="message.content"
+          :sent="message.author.id === currentUserId"
         />
       </q-infinite-scroll>
     </div>
@@ -27,8 +26,10 @@
 import { ref, onMounted, watch } from 'vue';
 import { Message } from 'components/models';
 import { QInfiniteScrollProps } from 'quasar';
-import { useChatStore } from 'stores/store';
+import { useChatStore } from 'stores/chatStore';
 import { useRoute } from 'vue-router';
+import { useAuthStore } from 'stores/authStore';
+import { useOldChatStore } from 'stores/store';
 
 defineProps<{
   messages: Message[];
@@ -36,11 +37,14 @@ defineProps<{
 
 const chatContainer = ref<HTMLElement | null>(null);
 const chatStore = useChatStore();
+const oldChatStore = useOldChatStore();
+const authStore = useAuthStore();
+const currentUserId = authStore.user?.id;
 const route = useRoute();
 
 const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
   setTimeout(() => {
-    chatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
+    oldChatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
     done(false);
   }, 1500);
 };
@@ -54,7 +58,7 @@ const scrollToBottom = () => {
 };
 
 watch(
-  () => chatStore.newMessageFlag,
+  () => oldChatStore.newMessageFlag,
   (newMessageFlag) => {
     if (newMessageFlag) {
       scrollToBottom();
