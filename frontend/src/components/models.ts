@@ -1,13 +1,14 @@
 export interface Message {
-  id: number
+  id: number;
   createdBy: string;
   channelId: string;
-  content: string
+  content: string;
 }
 
 export interface Channel {
   id: number;
   name: string;
+  createdBy: number;
   isPrivate: boolean;
 }
 

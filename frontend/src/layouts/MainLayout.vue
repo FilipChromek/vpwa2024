@@ -91,10 +91,13 @@ import { ref } from 'vue';
 import TerminalComponent from 'components/TerminalComponent.vue';
 import ChatRoomsComponent from 'components/ChatRoomsComponent.vue';
 import StatusComponent from 'components/StatusComponent.vue';
+import { useAuthStore } from 'stores/authStore';
 
 const headerMenu = ref(false);
 const leftDrawerOpen = ref(false);
 const isCommandDialogVisible = ref(false);
+
+const authStore = useAuthStore();
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -105,10 +108,9 @@ const onMenuCommands = () => {
   headerMenu.value = !headerMenu.value;
 };
 
-const onMenuLogOut = () => {
-  localStorage.removeItem('token');
+const onMenuLogOut = async () => {
   headerMenu.value = !headerMenu.value;
-  window.location.href = '/auth/login';
+  await authStore.logout();
 };
 
 const checkUser = () => {

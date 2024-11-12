@@ -13,7 +13,6 @@ export const useChatStore = defineStore('chatStore', () => {
   });
 
   const connectToChannel = (channelId: number) => {
-    // Disconnect the previous socket if it exists
     if (socket) {
       socket.disconnect();
     }
@@ -39,6 +38,7 @@ export const useChatStore = defineStore('chatStore', () => {
     socket.emit('loadMessages');
 
     socket.once('messagesLoaded', (loadedMessages: Message[]) => {
+      console.log('Loaded messages: ', loadedMessages);
       messages.value = loadedMessages;
     });
 

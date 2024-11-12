@@ -5,11 +5,11 @@
       class="chat-container q-pa-md col-12 justify-end bg-grey-2"
     >
       <q-infinite-scroll @load="onLoad" reverse>
-        <template v-slot:loading>
-          <div class="row justify-center q-my-md">
-            <q-spinner color="primary" name="dots" size="40px" />
-          </div>
-        </template>
+        <!--        <template v-slot:loading>-->
+        <!--          <div class="row justify-center q-my-md">-->
+        <!--            <q-spinner color="primary" name="dots" size="40px" />-->
+        <!--          </div>-->
+        <!--        </template>-->
         <q-chat-message
           v-for="(message, index) in messages"
           :key="index"
@@ -24,29 +24,39 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
+// import { QInfiniteScrollProps } from 'quasar';
 import { Message } from 'components/models';
-import { QInfiniteScrollProps } from 'quasar';
 //import { useChatStore } from 'stores/chatStore';
-import { useRoute } from 'vue-router';
+//import { useRoute } from 'vue-router';
 import { useAuthStore } from 'stores/authStore';
-import { useOldChatStore } from 'stores/store';
+//import { useOldChatStore } from 'stores/store';
+import { useChatStore } from 'stores/chatStore';
+import { useRoute } from 'vue-router';
+
+const chatContainer = ref<HTMLElement | null>(null);
+const chatStore = useChatStore();
+// const oldChatStore = useOldChatStore();
+const authStore = useAuthStore();
+// const route = useRoute();
+
+// const chatStore = useChatStore();
+const route = useRoute();
+
+onMounted(() => {
+  const channelId = parseInt(route.params.id as string, 10);
+  chatStore.connectToChannel(channelId);
+});
 
 defineProps<{
   messages: Message[];
 }>();
 
-const chatContainer = ref<HTMLElement | null>(null);
-//const chatStore = useChatStore();
-const oldChatStore = useOldChatStore();
-const authStore = useAuthStore();
-const route = useRoute();
-
-const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
-  setTimeout(() => {
-    oldChatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
-    done(false);
-  }, 1500);
-};
+// const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
+//   setTimeout(() => {
+//     // oldChatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
+//     done(false);
+//   }, 1500);
+// };
 
 const scrollToBottom = () => {
   if (chatContainer.value) {
@@ -56,20 +66,18 @@ const scrollToBottom = () => {
   }
 };
 
-watch(
-  () => oldChatStore.newMessageFlag,
-  (newMessageFlag) => {
-    if (newMessageFlag) {
-      scrollToBottom();
-      oldChatStore.newMessageFlag = false;
-    }
-  },
-  { deep: true }
-);
-
 onMounted(() => {
   scrollToBottom();
 });
+
+watch(
+  () => chatStore.messages.length,
+  () => {
+    console.log('scrolling to bottom');
+    scrollToBottom();
+  },
+  { deep: true }
+);
 </script>
 
 <style scoped>

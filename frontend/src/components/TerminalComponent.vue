@@ -62,8 +62,12 @@
         </q-card-section>
 
         <q-list>
-          <q-item v-for="person in chatStore.people" :key="person.id">
-            <q-item-section>{{ person.name }}</q-item-section>
+          <q-item v-for="person in channelStore.channelUsers" :key="person.id">
+            <q-item-section
+              >{{ person.firstName }} {{ person.lastName }} (@{{
+                person.username
+              }})</q-item-section
+            >
           </q-item>
         </q-list>
 
@@ -87,22 +91,21 @@ const scrollToBottom = () => {
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useOldChatStore } from 'stores/store';
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
+import { useChatStore } from 'stores/chatStore';
+import { useChannelStore } from 'stores/channelStore';
 
-const chatStore = useOldChatStore();
+const oldChatStore = useOldChatStore();
+const chatStore = useChatStore();
+const channelStore = useChannelStore();
 const route = useRoute();
-const router = useRouter();
 
 const newMessage = ref('');
 const isPeopleListOpen = ref(false);
 const isUserListOpen = ref(false);
-const filteredPeople = ref(chatStore.people);
+const filteredPeople = ref(oldChatStore.people);
 const highlightedIndex = ref(0);
 // const tagInProgress = ref(false);
-
-const openPeopleList = () => {
-  isPeopleListOpen.value = true;
-};
 
 const onInput = () => {
   const message = newMessage.value;
@@ -114,7 +117,7 @@ const onInput = () => {
   if (isUserListOpen.value) {
     const searchPerson = message.split('@').pop();
 
-    filteredPeople.value = chatStore.people.filter((person) =>
+    filteredPeople.value = oldChatStore.people.filter((person) =>
       person.name.toLowerCase().includes(searchPerson!.toLowerCase())
     );
 
@@ -139,8 +142,8 @@ const highlightPreviousPerson = () => {
 
 const handleEnterKey = () => {
   if (isUserListOpen.value && highlightedIndex.value >= 0) {
-    const selectedPerson = filteredPeople.value[highlightedIndex.value];
-    tagPerson(selectedPerson.name);
+    // const selectedPerson = filteredPeople.value[highlightedIndex.value];
+    // tagPerson(selectedPerson.name);
   } else {
     sendMessage();
   }
@@ -154,43 +157,75 @@ const tagPerson = (name: string) => {
 };
 
 const checkForCommand = () => {
-  const message = newMessage.value;
+  const message = newMessage.value.trim();
+  const parts = message.split(' ');
+  const command = parts[0];
+  const channelId = parseInt(route.params.id as string, 10);
 
-  if (message.substring(0, 5) === '/join') {
-    const parameter = message.substring(5).split(' ');
-    const name = parameter[1];
-    if (parameter[2] == 'public') {
-      chatStore.addChatRoom(name, 'public', router);
-    } else {
-      chatStore.addChatRoom(name, 'private', router);
+  switch (command) {
+    case '/join': {
+      const channelName = parts[1];
+      const isPrivate = parts[2] === 'private';
+      if (!channelName) {
+        return false;
+      }
+      channelStore.addChannel(channelName, isPrivate);
+      newMessage.value = '';
+      return true;
     }
-    const newRoomId = chatStore.chatRooms[chatStore.chatRooms.length - 1].id;
-    router.push(`/channels/${newRoomId}`);
-    newMessage.value = '';
-    return true;
-  } else if (message.substring(0, 5) === '/list') {
-    openPeopleList();
-    newMessage.value = '';
-    return true;
-  } else if (message.substring(0, 5) === '/quit') {
-    chatStore.removeChatRoom(parseInt(route.params.id as string, 10), router);
-    newMessage.value = '';
-    return true;
-  } else if (message.substring(0, 7) === '/cancel') {
-    chatStore.removeChatRoom(parseInt(route.params.id as string, 10), router);
-    newMessage.value = '';
-    return true;
-  } else if (message.substring(0, 7) === '/invite') {
-    newMessage.value = '';
-    return true;
-  } else if (message.substring(0, 7) === '/revoke') {
-    newMessage.value = '';
-    return true;
-  } else if (message.substring(0, 5) === '/kick') {
-    newMessage.value = '';
-    return true;
+
+    case '/invite': {
+      const username = parts[1];
+      if (!username) {
+        return false;
+      }
+      channelStore.inviteUser(channelId, username);
+      newMessage.value = '';
+      return true;
+    }
+
+    case '/revoke': {
+      const username = parts[1];
+      if (!username) {
+        return false;
+      }
+      channelStore.revokeUser(channelId, username);
+      newMessage.value = '';
+      return true;
+    }
+
+    case '/kick': {
+      const username = parts[1];
+      if (!username) {
+        return false;
+      }
+      // channelStore.kickUser(channelId, username);
+      newMessage.value = '';
+      return true;
+    }
+
+    case '/quit': {
+      channelStore.removeChannel(channelId);
+      newMessage.value = '';
+      return true;
+    }
+
+    case '/cancel': {
+      channelStore.removeChannel(channelId);
+      newMessage.value = '';
+      return true;
+    }
+
+    case '/list': {
+      channelStore.listChannelUsers(channelId);
+      isPeopleListOpen.value = true;
+      newMessage.value = '';
+      return true;
+    }
+
+    default:
+      return false;
   }
-  return false;
 };
 
 const sendMessage = () => {
@@ -198,8 +233,8 @@ const sendMessage = () => {
     if (checkForCommand()) {
       return;
     }
-    const chatRoomId = parseInt(route.params.id as string, 10);
-    chatStore.sendMessage(newMessage.value, chatRoomId);
+    // const chatRoomId = parseInt(route.params.id as string, 10);
+    chatStore.addMessage(newMessage.value);
     // scrollToBottom();
   }
   newMessage.value = '';

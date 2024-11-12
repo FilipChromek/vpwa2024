@@ -33,7 +33,12 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/channels', 'ChannelsController.index').middleware('auth')
+  Route.get('/channels/:id/users', 'ChannelsController.listChannelUsers').middleware('auth')
   Route.post('/channels', 'ChannelsController.store').middleware('auth')
+  Route.post('/channels/:id/invite', 'ChannelsController.inviteUser').middleware('auth')
+  Route.post('/channels/:id/revoke', 'ChannelsController.revokeUser').middleware('auth')
+  Route.delete('/channels/:id', 'ChannelsController.destroy').middleware('auth')
+  Route.delete('/channels/:id/remove-user', 'ChannelsController.removeUser').middleware('auth')
 }).prefix('api')
 
 Route.get('/api/current-user', 'AuthController.currentUser').middleware('auth')
