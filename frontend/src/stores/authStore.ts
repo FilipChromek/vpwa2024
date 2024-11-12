@@ -21,6 +21,8 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = response.data.token.token;
       user.value = response.data.user;
       localStorage.setItem('token', token.value!);
+      api.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+      isAuthenticated.value = true;
       router.push('/');
     } catch (error) {
       console.error('Registration failed:', error);
@@ -32,7 +34,7 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await api.post('/login', credentials);
       token.value = response.data.token.token;
       user.value = response.data.user;
-      console.log(token.value);
+      console.log('Token receiver from server:', token.value);
       isAuthenticated.value = true;
       localStorage.setItem('token', token.value!);
       api.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
@@ -43,28 +45,42 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const logout = async () => {
-    try {
-      await api.post('/logout');
-      token.value = null;
-      user.value = null;
-      isAuthenticated.value = false;
-      router.push({ name: 'login' }); // Redirect to login
-    } catch (error) {
-      console.error('Logout failed:', error);
+    // await api.post('/logout');
+    token.value = null;
+    user.value = null;
+    isAuthenticated.value = false;
+    localStorage.removeItem('token');
+    delete api.defaults.headers.common['Authorization'];
+    router.push('/auth/login'); // Redirect to login
+  };
+
+  const restoreUser = async () => {
+    if (token.value) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+      try {
+        const response = await api.get('/api/current-user');
+        console.log('User restoration response:', response.data);
+        user.value = response.data;
+        isAuthenticated.value = true;
+      } catch (error) {
+        console.error('Session restoration failed:', error);
+        await logout();
+      }
     }
   };
 
-  const checkAuthStatus = async () => {
-    try {
-      const response = await api.get('/api/current-user');
-      user.value = response.data.user;
-      isAuthenticated.value = true;
-    } catch {
-      isAuthenticated.value = false;
-      token.value = null;
-      router.push('/login'); // Redirect to login if not authenticated
-    }
-  };
+  // const initializeAuth = async () => {
+  //   const storedToken = localStorage.getItem('token');
+  //   if (storedToken) {
+  //     token.value = storedToken;
+  //     api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+  //     await restoreUser();
+  //   } else {
+  //     await logout();
+  //   }
+  // };
+  //
+  // initializeAuth();
 
   return {
     isAuthenticated,
@@ -73,6 +89,6 @@ export const useAuthStore = defineStore('auth', () => {
     register,
     login,
     logout,
-    checkAuthStatus,
+    restoreUser,
   };
 });

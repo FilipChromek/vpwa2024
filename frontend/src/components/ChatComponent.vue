@@ -13,9 +13,9 @@
         <q-chat-message
           v-for="(message, index) in messages"
           :key="index"
-          :name="message.content"
+          :name="message.author.username"
           :text="[message.content]"
-          :sent="message.id === currentUserId"
+          :sent="message.author.id === authStore.user?.id"
         />
       </q-infinite-scroll>
     </div>
@@ -39,7 +39,6 @@ const chatContainer = ref<HTMLElement | null>(null);
 const chatStore = useChatStore();
 const oldChatStore = useOldChatStore();
 const authStore = useAuthStore();
-const currentUserId = authStore.user?.id;
 const route = useRoute();
 
 const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {

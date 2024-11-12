@@ -11,6 +11,13 @@ export default class UserSeeder extends BaseSeeder {
       lastName: 'Adam',
       username: 'adamski',
     })
+    await User.create({
+      email: 'filip@filip.com',
+      password: 'filipfilip',
+      firstName: 'Filip',
+      lastName: 'Filip',
+      username: 'filipanom413',
+    })
     await UserFactory.createMany(10)
   }
 }

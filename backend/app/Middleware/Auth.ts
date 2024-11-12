@@ -76,10 +76,12 @@ export default class AuthMiddleware {
   }
 
   public async wsHandle(
-    { auth }: WsContextContract,
+    { auth, socket }: WsContextContract,
     next: () => Promise<void>,
     customGuards: (keyof GuardsList)[]
   ) {
+    const token = socket.handshake.auth.token; // Access token from the socket handshake
+    console.log('Token received in wsHandle:', token);
     /**
      * Uses the user defined guards or the default guard mentioned in
      * the config file

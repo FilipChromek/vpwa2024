@@ -1,73 +1,56 @@
 import { defineStore } from 'pinia';
 import { Message } from 'components/models';
 import { ref } from 'vue';
-import { io, Socket } from 'socket.io-client';
-
-// export const useChatStore = defineStore('chatStore', () => {
-//   const socket: Socket = io('http://localhost:3333/channels/1');
-//   const messages = ref<Message[]>([]);
-//
-//   const loadMessages = () => {
-//     socket.emit('loadMessages');
-//
-//     socket.once('messagesLoaded', (loadedMessages: Message[]) => {
-//       messages.value = loadedMessages;
-//     });
-//   };
-//
-//   const addMessage = (content: string) => {
-//     socket.emit('addMessage', content); // Send message to the server
-//   };
-//
-//   // Listen for any new messages from the server in real time
-//   socket.on('message', (message: Message) => {
-//     messages.value.push(message); // Add incoming message to the state
-//   });
-//
-//   // Return state and actions to be used outside the store
-//   return {
-//     messages,
-//     loadMessages,
-//     addMessage,
-//   };
-// });
+import { Manager, Socket } from 'socket.io-client';
 
 export const useChatStore = defineStore('chatStore', () => {
   const messages = ref<Message[]>([]);
-  const socket = ref<Socket | null>(null);
+  let socket: Socket | null = null;
+  const manager = new Manager('http://localhost:3333', {
+    autoConnect: false,
+    transports: ['websocket'],
+    withCredentials: true,
+  });
 
   const connectToChannel = (channelId: number) => {
-    if (socket.value) {
-      socket.value.disconnect();
+    // Disconnect the previous socket if it exists
+    if (socket) {
+      socket.disconnect();
     }
-    console.log('DOSOL SOM TU 1');
 
-    socket.value = io(`http://localhost:3333/channels/${channelId}`, {
-      withCredentials: true,
-      transports: ['websocket'],
+    const token = localStorage.getItem('token');
+    // console.log('Token retrieved for WebSocket:', token);
+    socket = manager.socket(`/channels/${channelId}`, {
+      auth: {
+        token: token,
+      },
     });
 
-    console.log('DOSOL SOM TU 2');
+    socket.on('connect', () => {
+      console.log('Socket connected:', socket!.id);
+    });
 
-    socket.value.emit('loadMessages');
+    socket.on('connect_error', (error) => {
+      console.error('Connection error:', error);
+    });
 
-    console.log('DOSOL SOM TU 3');
+    socket.connect();
 
-    socket.value.once('messagesLoaded', (loadedMessages: Message[]) => {
+    socket.emit('loadMessages');
+
+    socket.once('messagesLoaded', (loadedMessages: Message[]) => {
       messages.value = loadedMessages;
-      console.log('Messages loaded:', loadedMessages);
     });
 
-    console.log('DOSOL SOM TU 4');
-
-    socket.value.on('message', (message: Message) => {
+    socket.on('message', (message: Message) => {
+      console.log('New message (listening):', message);
       messages.value.push(message);
     });
   };
 
   const addMessage = (content: string) => {
-    if (socket.value) {
-      socket.value.emit('addMessage', content);
+    if (socket) {
+      socket.emit('addMessage', content);
     }
   };
 

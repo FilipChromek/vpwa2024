@@ -13,6 +13,7 @@ const route = useRoute();
 
 onMounted(() => {
   const channelId = parseInt(route.params.id as string, 10);
+  console.log('channelId', channelId);
   chatStore.connectToChannel(channelId);
 });
 </script>

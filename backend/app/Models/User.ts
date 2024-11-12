@@ -49,7 +49,7 @@ export default class User extends BaseModel {
   public createdChannels: HasMany<typeof Channel>
 
   @hasMany(() => Message, {
-    foreignKey: 'userId',
+    foreignKey: 'createdBy',
   })
   public messages: HasMany<typeof Message>
 

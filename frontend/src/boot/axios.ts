@@ -3,14 +3,14 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from 'stores/authStore';
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:3333', // process.env.API_URL,
+  baseURL: process.env.API_URL,
   withCredentials: true,
   headers: {},
 });
 
 api.interceptors.request.use((config) => {
   const authStore = useAuthStore();
-  console.log(authStore.token);
+  console.log('Axios token:', authStore.token);
   if (authStore.token) {
     config.headers.Authorization = `Bearer ${authStore.token}`;
   }
@@ -24,7 +24,7 @@ api.interceptors.response.use(
 
     // Check if error status is 401 (unauthorized)
     if (error.response?.status === 401) {
-      router.push({ name: 'login' }); // Redirect to login page
+      router.push('/auth/login'); // Redirect to login page
     }
 
     return Promise.reject(error);

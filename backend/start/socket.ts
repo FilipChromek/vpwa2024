@@ -21,8 +21,8 @@ Ws.namespace('/')
     return 'hi'
   })
 
-Ws.namespace("channels/:id")
-  // .middleware('channel') // check if user can join given channel
+Ws.namespace("/channels/:id")
+  //.middleware('auth') // check if user can join given channel
   // .connected(({ socket, params }) => {
   //     console.log(`User connected to channel: ${params.id} with socket ID: ${socket.id}`);
   //   })

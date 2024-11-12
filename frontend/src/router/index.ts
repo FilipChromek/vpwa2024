@@ -40,7 +40,7 @@ export default route(function (/* { store, ssrContext } */) {
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
     if (requiresAuth && !authStore.isAuthenticated) {
-      await authStore.checkAuthStatus(); // Verifies user session
+      await authStore.restoreUser(); // Verifies user session
 
       if (!authStore.isAuthenticated) {
         return next('/auth/login'); // Redirect to login if unauthenticated

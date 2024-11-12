@@ -4,7 +4,6 @@ import Message from "App/Models/Message";
 export default class ChatsController {
   public async loadMessages({ params, socket }: WsContextContract) {
     const messages = await Message.query().where('channelId', params.id).preload('author').orderBy('createdAt', 'asc');
-    console.log("TAKTO TO VYZERA:", messages);
     socket.emit('messagesLoaded', messages)
   }
 
