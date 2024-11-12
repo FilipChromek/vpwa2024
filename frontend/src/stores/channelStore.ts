@@ -83,6 +83,24 @@ export const useChannelStore = defineStore('channelStore', () => {
     }
   };
 
+  const findOrCreateChannel = async (name: string, isPrivate: boolean) => {
+    try {
+      const response = await api.post('/api/channels/find-or-create', {
+        name,
+        isPrivate,
+      });
+
+      console.log('Channel reponse data:', response.data);
+      const channel = response.data;
+
+      if (channel) {
+        await loadChannels();
+      }
+    } catch (error) {
+      console.error('Error finding or creating channel:', error);
+    }
+  };
+
   const publicChannels = computed(() =>
     channels.value.filter((channel) => !channel.isPrivate)
   );
@@ -103,5 +121,6 @@ export const useChannelStore = defineStore('channelStore', () => {
     inviteUser,
     revokeUser,
     listChannelUsers,
+    findOrCreateChannel,
   };
 });

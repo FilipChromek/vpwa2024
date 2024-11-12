@@ -14,6 +14,7 @@ export const useChatStore = defineStore('chatStore', () => {
 
   const connectToChannel = (channelId: number) => {
     if (socket) {
+      socket.off('message');
       socket.disconnect();
     }
 

@@ -169,7 +169,8 @@ const checkForCommand = () => {
       if (!channelName) {
         return false;
       }
-      channelStore.addChannel(channelName, isPrivate);
+      console.log('ISPRIVATE: ', isPrivate);
+      channelStore.findOrCreateChannel(channelName, isPrivate);
       newMessage.value = '';
       return true;
     }

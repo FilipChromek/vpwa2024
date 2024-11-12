@@ -37,6 +37,7 @@ Route.group(() => {
   Route.post('/channels', 'ChannelsController.store').middleware('auth')
   Route.post('/channels/:id/invite', 'ChannelsController.inviteUser').middleware('auth')
   Route.post('/channels/:id/revoke', 'ChannelsController.revokeUser').middleware('auth')
+  Route.post('/channels/find-or-create', 'ChannelsController.findOrCreate').middleware('auth');
   Route.delete('/channels/:id', 'ChannelsController.destroy').middleware('auth')
   Route.delete('/channels/:id/remove-user', 'ChannelsController.removeUser').middleware('auth')
 }).prefix('api')

@@ -84,4 +84,26 @@ export default class ChannelsController {
     const users = await channel.related('users').query()
     return response.ok(users)
   }
+
+  public async findOrCreate({ auth, request, response }: HttpContextContract) {
+    const { name, isPrivate } = request.only(['name', 'isPrivate'])
+    let channel = await Channel.query().where('name', name).first()
+
+    if (channel) {
+      if (channel.isPrivate) {
+        return response.unauthorized({ message: 'Channel is private' })
+      }
+      await channel.related('users').attach([auth.user!.id])
+    } else {
+      channel = await Channel.create({
+        name,
+        isPrivate,
+        createdBy: auth.user!.id,
+        lastActivity: DateTime.now(),
+      })
+      await channel.related('users').attach([auth.user!.id])
+    }
+
+    return response.ok(channel)
+  }
 }
