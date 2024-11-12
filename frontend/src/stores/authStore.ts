@@ -2,11 +2,12 @@ import { defineStore } from 'pinia';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import { api } from 'boot/axios';
+import { User } from 'components/models';
 
 export const useAuthStore = defineStore('auth', () => {
   const router = useRouter();
   const isAuthenticated = ref(false);
-  const user = ref(null);
+  const user = ref<User | null>(null);
   const token = ref<string | null>(localStorage.getItem('token'));
 
   const register = async (credentials: {
@@ -32,6 +33,7 @@ export const useAuthStore = defineStore('auth', () => {
   const login = async (credentials: { email: string; password: string }) => {
     try {
       const response = await api.post('/login', credentials);
+      console.log(response.data);
       token.value = response.data.token.token;
       user.value = response.data.user;
       console.log('Token receiver from server:', token.value);

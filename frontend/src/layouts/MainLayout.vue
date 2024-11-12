@@ -106,17 +106,17 @@ const onMenuCommands = () => {
 };
 
 const onMenuLogOut = () => {
-  localStorage.removeItem('user');
+  localStorage.removeItem('token');
   headerMenu.value = !headerMenu.value;
   window.location.href = '/auth/login';
 };
 
 const checkUser = () => {
-  const user = localStorage.getItem('user');
+  const user = localStorage.getItem('token');
   if (!user) {
     window.location.href = '/auth/login';
   } else {
-    const parsedUser = JSON.parse(user);
+    const parsedUser = user;
     console.log(parsedUser);
   }
 };
