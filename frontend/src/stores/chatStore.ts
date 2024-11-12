@@ -42,13 +42,13 @@ export const useChatStore = defineStore('chatStore', () => {
     }
     console.log('DOSOL SOM TU 1');
 
-    socket.value = io(`http://localhost:3333/channels/${channelId}`, {
+    socket.value = io(`ws://127.0.0.1:3333/channels/${channelId}`, {
       withCredentials: true,
       transports: ['websocket'],
     });
-
+    socket.value.connect();
     console.log('DOSOL SOM TU 2');
-
+    console.log(socket.value.connected);
     socket.value.emit('loadMessages');
 
     console.log('DOSOL SOM TU 3');
@@ -59,7 +59,7 @@ export const useChatStore = defineStore('chatStore', () => {
     });
 
     console.log('DOSOL SOM TU 4');
-
+    console.log(messages.value);
     socket.value.on('message', (message: Message) => {
       messages.value.push(message);
     });

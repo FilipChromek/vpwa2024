@@ -3,11 +3,15 @@ import Message from "App/Models/Message";
 
 export default class ChatsController {
   public async loadMessages({ params, socket }: WsContextContract) {
-    const messages = await Message.query().where('channelId', params.id).preload('author').orderBy('createdAt', 'asc');
-    console.log("TAKTO TO VYZERA:", messages);
-    socket.emit('messagesLoaded', messages)
+    console.log("sadd");
+    const channelId = parseInt(params.id, 10);
+    const messages = await Message.query()
+      .where('channelId', channelId)
+      .preload('author')
+      .orderBy('createdAt', 'asc');
+    
+    socket.emit('messagesLoaded', messages);
   }
-
 public async addMessage({ params, socket, auth }: WsContextContract, content: string) {
     const channelId = parseInt(params.id);
     const message = await Message.create({

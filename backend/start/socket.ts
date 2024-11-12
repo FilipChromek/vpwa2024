@@ -8,8 +8,10 @@
 */
 
 import Ws from '@ioc:Ruby184/Socket.IO/Ws'
+console.log("aaaaaaaaaaaaaaaaa");
 
 Ws.namespace('/')
+
   .connected(({ socket }) => {
     console.log('new websocket connection: ', socket.id)
   })
@@ -18,13 +20,17 @@ Ws.namespace('/')
   })
   .on('hello', ({ socket }, msg: string) => {
     console.log('websocket greeted: ', socket.id, msg)
-    return 'hi'
+   // socket.emit("connect",["sad"])
+    return ['hi']
   })
 
 Ws.namespace("channels/:id")
+
   // .middleware('channel') // check if user can join given channel
   // .connected(({ socket, params }) => {
   //     console.log(`User connected to channel: ${params.id} with socket ID: ${socket.id}`);
   //   })
   .on("loadMessages", "ChatsController.loadMessages")
   .on("addMessage", "ChatsController.addMessage");
+
+

@@ -26,7 +26,7 @@
 import { ref, onMounted, watch } from 'vue';
 import { Message } from 'components/models';
 import { QInfiniteScrollProps } from 'quasar';
-import { useChatStore } from 'stores/chatStore';
+//import { useChatStore } from 'stores/chatStore';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from 'stores/authStore';
 import { useOldChatStore } from 'stores/store';
@@ -36,7 +36,7 @@ defineProps<{
 }>();
 
 const chatContainer = ref<HTMLElement | null>(null);
-const chatStore = useChatStore();
+//const chatStore = useChatStore();
 const oldChatStore = useOldChatStore();
 const authStore = useAuthStore();
 const currentUserId = authStore.user?.id;
@@ -62,7 +62,7 @@ watch(
   (newMessageFlag) => {
     if (newMessageFlag) {
       scrollToBottom();
-      chatStore.newMessageFlag = false;
+      oldChatStore.newMessageFlag = false;
     }
   },
   { deep: true }
