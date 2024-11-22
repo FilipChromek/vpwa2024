@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
-// import { QInfiniteScrollProps } from 'quasar';
+import { QInfiniteScrollProps } from 'quasar';
 import { Message } from 'components/models';
 //import { useChatStore } from 'stores/chatStore';
 //import { useRoute } from 'vue-router';
@@ -51,12 +51,12 @@ defineProps<{
   messages: Message[];
 }>();
 
-// const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
-//   setTimeout(() => {
-//     // oldChatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
-//     done(false);
-//   }, 1500);
-// };
+const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
+  setTimeout(() => {
+    // oldChatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
+    done(false);
+  }, 1500);
+};
 
 const scrollToBottom = () => {
   if (chatContainer.value) {

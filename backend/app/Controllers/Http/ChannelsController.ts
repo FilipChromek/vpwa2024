@@ -9,7 +9,7 @@ export default class ChannelsController {
     try {
       const user = auth.user
       console.log('Before channels')
-      const channels = await user?.related('channels').query()
+      const channels = await user?.related('channels').query().orderBy('createdAt', 'desc')
       console.log('After channels')
       return response.ok(channels)
     } catch (error) {
