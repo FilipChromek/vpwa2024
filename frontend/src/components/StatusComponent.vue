@@ -19,9 +19,11 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { Notify } from 'quasar';
+import { useAuthStore } from 'src/stores/authStore';
 
-const userName = ref('Filip Chromek');
-const selectedStatus = ref('Online');
+const authStore = useAuthStore();
+const userName = ref(authStore.user?.username);
+const selectedStatus = ref(authStore.user?.status);
 const statusOptions = ref(['Online', 'Away', 'DND', 'Offline']);
 
 watch(selectedStatus, (newStatus, oldStatus) => {

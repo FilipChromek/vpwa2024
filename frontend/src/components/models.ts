@@ -23,6 +23,7 @@ export interface User {
   id: number;
   name: string;
   username: string;
+  status: string;
 }
 
 export interface Meta {
