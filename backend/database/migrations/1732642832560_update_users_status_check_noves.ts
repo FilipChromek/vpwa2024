@@ -5,6 +5,9 @@ export default class extends BaseSchema {
 
   public async up() {
     this.schema.alterTable(this.tableName, (table) => {
+      table.dropColumn('status');
+    });
+    this.schema.alterTable(this.tableName, (table) => {
       table.enum('status', ['Online', 'Offline', 'DND','Away']).defaultTo('Offline');
     });
   }

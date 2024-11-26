@@ -41,19 +41,21 @@ class AuthService {
   }
   public async changeStatus(auth: HttpContextContract['auth'], status:string) {
     const user = await auth.user
+    console.log(user);
+    console.log(status);
     if (user){
-      if (status=="Online"){
+      if (status=='Online'){
         user.status = UserStatus.ONLINE
       }
-      else if( status == "DND"){
+      else if( status == 'DND'){
 
         user.status = UserStatus.DND
       }
-      else if(status=="Away"){
+      else if(status=='Away'){
 
         user.status = UserStatus.AWAY
       }
-      else if(status == "Offline"){
+      else if(status == 'Offline'){
 
         user.status = UserStatus.OFFLINE
 

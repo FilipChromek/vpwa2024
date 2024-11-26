@@ -34,6 +34,12 @@ watch(selectedStatus, (newStatus, oldStatus) => {
       timeout: 2000,
       position: 'top-right',
     });
+
+    if (newStatus !== undefined) {
+    authStore.changeStatus(newStatus);
+} else {
+    console.error("newStatus is undefined!");
+}
   }
 });
 </script>

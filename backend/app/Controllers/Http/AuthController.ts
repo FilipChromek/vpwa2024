@@ -36,6 +36,7 @@ export default class AuthController {
   }
   async changeStatus({ request, auth, response }: HttpContextContract) {
     try {
+      console.log(request.only(['status']));
       // Extract status from the request payload
       const { status } = request.only(['status'])
 
