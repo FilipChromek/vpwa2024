@@ -23,4 +23,22 @@ public async addMessage({ params, socket, auth }: WsContextContract, content: st
     socket.nsp.emit('message', message);
     return message;
   }
+  public async writingMessage({ params, socket, auth }: WsContextContract, content: string) {
+    const channelId = parseInt(params.id);
+  
+    // Create a new instance of the Message model without saving it to the database
+    const message = new Message();
+    message.content = content;
+    message.channelId = channelId;
+    message.createdBy = auth.user!.id;
+  
+    // Temporarily load the author relationship for the message
+    await message.$setRelated('author', auth.user!);
+  
+    // Emit the event to all connected sockets in the namespace
+    socket.nsp.emit('writing', message);
+  
+    // Return the unsaved message
+    return message;
+  }
 }

@@ -27,4 +27,5 @@ Ws.namespace("/channels/:id")
   //     console.log(`User connected to channel: ${params.id} with socket ID: ${socket.id}`);
   //   })
   .on("loadMessages", "ChatsController.loadMessages")
-  .on("addMessage", "ChatsController.addMessage");
+  .on("addMessage", "ChatsController.addMessage")
+  .on("writingMessage", "ChatsController.writingMessage");
