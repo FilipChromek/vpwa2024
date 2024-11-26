@@ -1,6 +1,7 @@
 <template>
   <p style="color: black; padding-left: 10px">
-    <i>Adam Kačmár and 2 others are typing...</i>
+    <WritingComponent></WritingComponent>
+    
   </p>
   <div class="row items-center q-gutter-md">
     <q-input
@@ -94,6 +95,7 @@ import { useOldChatStore } from 'stores/store';
 // import { useRouter } from 'vue-router';
 import { useChatStore } from 'stores/chatStore';
 import { useChannelStore } from 'stores/channelStore';
+import WritingComponent from './WritingComponent.vue';
 
 const oldChatStore = useOldChatStore();
 const chatStore = useChatStore();

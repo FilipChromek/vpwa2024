@@ -5,6 +5,7 @@ import { Manager, Socket } from 'socket.io-client';
 
 export const useChatStore = defineStore('chatStore', () => {
   const messages = ref<Message[]>([]);
+  const writingMessages = ref<Message[]>([]);
   let socket: Socket | null = null;
   const manager = new Manager('http://localhost:3333', {
     autoConnect: false,
@@ -47,6 +48,20 @@ export const useChatStore = defineStore('chatStore', () => {
       console.log('New message (listening):', message);
       messages.value.push(message);
     });
+    socket.on('writing', (message: Message) => {
+      console.log('Writing message: ', message);
+      // Remove any existing writing message from the same user
+  const existingIndex = writingMessages.value.findIndex(
+    (msg) => msg.createdBy === message.createdBy // Use the correct unique identifier
+  );
+  if (existingIndex !== -1) {
+    writingMessages.value.splice(existingIndex, 1); // Remove the old message
+  }
+
+  // Add the new writing message
+  writingMessages.value.push(message);
+      
+    });
   };
 
   const addMessage = (content: string) => {
@@ -66,5 +81,6 @@ export const useChatStore = defineStore('chatStore', () => {
     connectToChannel,
     addMessage,
     writingMessage,
+    writingMessages
   };
 });
