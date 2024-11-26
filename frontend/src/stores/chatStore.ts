@@ -54,10 +54,17 @@ export const useChatStore = defineStore('chatStore', () => {
       socket.emit('addMessage', content);
     }
   };
+  const writingMessage=(vstup:string)=>{
+    if (socket) {
+      socket.emit('writingMessage', vstup);
+    }
+
+  }
 
   return {
     messages,
     connectToChannel,
     addMessage,
+    writingMessage,
   };
 });

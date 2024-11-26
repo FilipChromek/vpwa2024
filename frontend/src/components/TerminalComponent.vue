@@ -241,13 +241,17 @@ const sendMessage = () => {
   newMessage.value = '';
   isUserListOpen.value = false;
 };
+const writingMessage = ()=>{
+  chatStore.writingMessage(newMessage.value);
 
+}
 watch(
   () => newMessage.value,
   (newVal) => {
     if (!newVal.includes('@')) {
       isUserListOpen.value = false;
     }
+    writingMessage()
   }
 );
 </script>
