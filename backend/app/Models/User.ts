@@ -5,9 +5,10 @@ import Channel from "App/Models/Channel";
 import Message from "App/Models/Message";
 
 export enum UserStatus {
-  ONLINE = 'online',
-  OFFLINE = 'offline',
+  ONLINE = 'Online',
+  OFFLINE = 'Offline',
   DND = 'DND',
+  AWAY = 'Away'
 }
 
 export default class User extends BaseModel {

@@ -46,6 +46,11 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  const changeStatus = async (newStatus: string) => {
+    await api.post('/changestatus',{'status':newStatus});
+    
+  };
+
   const logout = async () => {
     // await api.post('/logout');
     token.value = null;

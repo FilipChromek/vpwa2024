@@ -39,6 +39,31 @@ class AuthService {
 
     await auth.use('api').logout()
   }
+  public async changeStatus(auth: HttpContextContract['auth'], status:string) {
+    const user = await auth.user
+    if (user){
+      if (status=="Online"){
+        user.status = UserStatus.ONLINE
+      }
+      else if( status == "DND"){
+
+        user.status = UserStatus.DND
+      }
+      else if(status=="Away"){
+
+        user.status = UserStatus.AWAY
+      }
+      else if(status == "Offline"){
+
+        user.status = UserStatus.OFFLINE
+
+      }
+      
+      await user.save()
+    }
+
+   
+  }
 }
 
 export default new AuthService()
