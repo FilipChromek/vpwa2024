@@ -2,10 +2,13 @@ import { defineStore } from 'pinia';
 import { Message } from 'components/models';
 import { ref } from 'vue';
 import { Manager, Socket } from 'socket.io-client';
+import { useAuthStore } from 'src/stores/authStore';
+
 
 export const useChatStore = defineStore('chatStore', () => {
   const messages = ref<Message[]>([]);
   const writingMessages = ref<Message[]>([]);
+  const authStore = useAuthStore();
   let socket: Socket | null = null;
   const manager = new Manager('http://localhost:3333', {
     autoConnect: false,
@@ -57,9 +60,10 @@ export const useChatStore = defineStore('chatStore', () => {
   if (existingIndex !== -1) {
     writingMessages.value.splice(existingIndex, 1); // Remove the old message
   }
-
+  if (message.content!="" && message.createdBy!=authStore.user?.id.toString()){
   // Add the new writing message
   writingMessages.value.push(message);
+  }
       
     });
   };
