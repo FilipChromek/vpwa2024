@@ -55,12 +55,12 @@ export const useChatStore = defineStore('chatStore', () => {
     });
     socket.on('writing', (messages: Message[]) => {
       console.log('Writing message: ', messages);
-      // Remove any existing writing message from the same user
+   
       
       writingMessages.value.splice(0, writingMessages.value.length);
 
       console.log("aaaaa");
-      // Add only messages that are not written by the current user
+    
       messages.forEach((message) => {
         if ( message.createdBy != authStore.user?.id.toString()) {
           writingMessages.value.push(message);
