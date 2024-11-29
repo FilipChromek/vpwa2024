@@ -51,21 +51,24 @@ export const useChatStore = defineStore('chatStore', () => {
       console.log('New message (listening):', message);
       messages.value.push(message);
     });
-    socket.on('writing', (message: Message) => {
-      console.log('Writing message: ', message);
+    socket.on('writing', (messages: Message[]) => {
+      console.log('Writing message: ', messages);
       // Remove any existing writing message from the same user
-  const existingIndex = writingMessages.value.findIndex(
-    (msg) => msg.createdBy === message.createdBy // Use the correct unique identifier
-  );
-  if (existingIndex !== -1) {
-    writingMessages.value.splice(existingIndex, 1); // Remove the old message
-  }
-  if (message.content!="" && message.createdBy!=authStore.user?.id.toString()){
-  // Add the new writing message
-  writingMessages.value.push(message);
-  }
+      
+      writingMessages.value.splice(0, writingMessages.value.length);
+
+      console.log("aaaaa");
+      // Add only messages that are not written by the current user
+      messages.forEach((message) => {
+        if ( message.createdBy != authStore.user?.id.toString()) {
+          writingMessages.value.push(message);
+          console.log("sad",message);
+        }
       
     });
+    console.log(writingMessages.value);
+  });
+
   };
 
   const addMessage = (content: string) => {
