@@ -81,6 +81,7 @@
             flat
             label="Add"
             color="primary"
+            v-close-popup
             @click="channelStore.addChannel(newChannelName, true)"
           />
         </q-card-actions>
@@ -108,6 +109,7 @@
             flat
             label="Add"
             color="primary"
+            v-close-popup
             @click="channelStore.addChannel(newChannelName, false)"
           />
         </q-card-actions>
