@@ -108,7 +108,12 @@ const isUserListOpen = ref(false);
 const filteredPeople = ref(oldChatStore.people);
 const highlightedIndex = ref(0);
 // const tagInProgress = ref(false);
+const openPeopleList = () =>{
+  const channelId = parseInt(route.params.id as string, 10);
+  channelStore.listChannelUsers(channelId);
+  isPeopleListOpen.value = true;
 
+}
 const onInput = () => {
   const message = newMessage.value;
 
