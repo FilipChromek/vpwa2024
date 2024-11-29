@@ -67,7 +67,7 @@
             <q-item-section
               >{{ person.firstName }} {{ person.lastName }} (@{{
                 person.username
-              }})</q-item-section
+              }}) - {{person.status}}</q-item-section
             >
           </q-item>
         </q-list>
