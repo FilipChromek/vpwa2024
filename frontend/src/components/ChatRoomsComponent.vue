@@ -81,8 +81,8 @@
             flat
             label="Add"
             color="primary"
-            v-close-popup
-            @click="channelStore.addChannel(newChannelName, true)"
+           @click="addPrivateChat"
+           
           />
         </q-card-actions>
       </q-card>
@@ -109,8 +109,8 @@
             flat
             label="Add"
             color="primary"
-            v-close-popup
-            @click="channelStore.addChannel(newChannelName, false)"
+            
+           @click="addPublicChat"
           />
         </q-card-actions>
       </q-card>
@@ -148,6 +148,21 @@ const openAddPublicChatDialog = () => {
   isAddPublicChatDialogOpen.value = true;
 };
 
+const addPrivateChat = () => {
+  if (newChannelName.value.trim()) {
+    channelStore.addChannel(newChannelName.value, true); 
+    newChannelName.value = '';
+    isAddPrivateChatDialogOpen.value = false;
+  }
+};
+
+const addPublicChat = () => {
+  if (newChannelName.value.trim()) {
+    channelStore.addChannel(newChannelName.value, false); 
+    newChannelName.value = ''; 
+    isAddPublicChatDialogOpen.value = false; 
+  }
+};
 //
 // const addPrivateChatRoom = () => {
 //   if (newPrivateChatRoomName.value.trim()) {
