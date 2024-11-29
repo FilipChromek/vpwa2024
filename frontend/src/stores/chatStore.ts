@@ -18,7 +18,9 @@ export const useChatStore = defineStore('chatStore', () => {
 
   const connectToChannel = (channelId: number) => {
     if (socket) {
+      writingMessage('');
       socket.off('message');
+      socket.off('writing');
       socket.disconnect();
     }
 
@@ -41,7 +43,7 @@ export const useChatStore = defineStore('chatStore', () => {
     socket.connect();
 
     socket.emit('loadMessages');
-
+    
     socket.once('messagesLoaded', (loadedMessages: Message[]) => {
       console.log('Loaded messages: ', loadedMessages);
       messages.value = loadedMessages;
@@ -68,7 +70,7 @@ export const useChatStore = defineStore('chatStore', () => {
     });
     console.log(writingMessages.value);
   });
-
+    writingMessage('');
   };
 
   const addMessage = (content: string) => {
