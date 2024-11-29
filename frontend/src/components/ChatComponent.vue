@@ -53,6 +53,8 @@ defineProps<{
 
 const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
   setTimeout(() => {
+    const channelId = parseInt(route.params.id as string, 10);
+//  chatStore.connectToChannel(channelId);
     // oldChatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
     done(false);
   }, 1500);
