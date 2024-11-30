@@ -3,7 +3,7 @@ import Message from "App/Models/Message";
 const writingUsers: Map<number,  Message[]> = new Map();
 
 export default class ChatsController {
-  public async loadMessages({ params, socket }: WsContextContract, from:number, to:number) {
+  public async loadMessages({ params, socket }: WsContextContract, from:number, to:number,channel_id:number) {
     console.log('Before loading messages')
    
     const limit = to-from;
@@ -16,7 +16,7 @@ export default class ChatsController {
       .limit(limit);
      // console.log(messages)
     console.log('After loading messages')
-    socket.emit('messagesLoaded', messages)
+    socket.emit('messagesLoaded', messages, channel_id)
   }
 
 public async addMessage({ params, socket, auth }: WsContextContract, content: string) {

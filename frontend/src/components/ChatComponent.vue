@@ -54,9 +54,9 @@ const fromIndex = ref(0);
 const pageSize = 10; 
 const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
   setTimeout(() => {
-    //const channelId = parseInt(route.params.id as string, 10);
+    const channelId = parseInt(route.params.id as string, 10);
 //  chatStore.connectToChannel(channelId);
-    chatStore.loadMessages(fromIndex.value, fromIndex.value+pageSize);
+    chatStore.loadMessages(fromIndex.value, fromIndex.value+pageSize, channelId);
     fromIndex.value += pageSize;
     // oldChatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
     done(false);
@@ -79,7 +79,7 @@ watch(
   () => chatStore.messages.length,
   () => {
     console.log('scrolling to bottom');
-    //scrollToBottom();
+    scrollToBottom();
   },
   { deep: true }
 );

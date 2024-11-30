@@ -17,7 +17,7 @@ export const useChatStore = defineStore('chatStore', () => {
   });
 
   const connectToChannel = (channelId: number) => {
-    messages.value=[];
+    messages.value.splice(0,messages.value.length);
     if (socket) {
       writingMessage('');
       socket.off('message');
@@ -45,8 +45,11 @@ export const useChatStore = defineStore('chatStore', () => {
 
     
     
-    socket.on('messagesLoaded', (loadedMessages: Message[]) => {
-      console.log('Loaded messages: ', loadedMessages);
+    socket.on('messagesLoaded', (loadedMessages: Message[], channel_id:number) => {
+      console.log('Loaded messages: ', loadedMessages, channelId, channel_id);
+      if (channel_id!=channelId){
+        return;
+      }
       loadedMessages.forEach((sprava) => {
         messages.value.unshift(sprava);
 
@@ -92,10 +95,10 @@ export const useChatStore = defineStore('chatStore', () => {
     }
 
   }
-  const loadMessages = (from:number, to:number) =>{
+  const loadMessages = (from:number, to:number, channel_id:number) =>{
     console.log("loadingmessageslazy", from, to);
     if (socket){
-    socket.emit('loadMessages',  from, to );
+    socket.emit('loadMessages',  from, to, channel_id );
     }
 
   }
