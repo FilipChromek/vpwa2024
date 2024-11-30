@@ -61,11 +61,11 @@ const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
       done(true);
       return;
     }
-//  chatStore.connectToChannel(channelId);
+
     chatStore.loadMessages(fromIndex.value, fromIndex.value+pageSize, channelId);
     fromIndex.value += pageSize;
     amount+=pageSize;
-    // oldChatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
+    
     done(false);
 
   }, 1500);
