@@ -5,11 +5,11 @@
       class="chat-container q-pa-md col-12 justify-end bg-grey-2"
     >
       <q-infinite-scroll @load="onLoad" reverse>
-        <!--        <template v-slot:loading>-->
-        <!--          <div class="row justify-center q-my-md">-->
-        <!--            <q-spinner color="primary" name="dots" size="40px" />-->
-        <!--          </div>-->
-        <!--        </template>-->
+               <template v-slot:loading>
+                 <div class="row justify-center q-my-md">
+                   <q-spinner color="primary" name="dots" size="40px" />
+                 </div>
+                </template>
         <q-chat-message
           v-for="(message, index) in messages"
           :key="index"
@@ -50,11 +50,14 @@ onMounted(() => {
 defineProps<{
   messages: Message[];
 }>();
-
+const fromIndex = ref(0);
+const pageSize = 10; 
 const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
   setTimeout(() => {
-    const channelId = parseInt(route.params.id as string, 10);
+    //const channelId = parseInt(route.params.id as string, 10);
 //  chatStore.connectToChannel(channelId);
+    chatStore.loadMessages(fromIndex.value, fromIndex.value+pageSize);
+    fromIndex.value += pageSize;
     // oldChatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
     done(false);
   }, 1500);
@@ -76,7 +79,7 @@ watch(
   () => chatStore.messages.length,
   () => {
     console.log('scrolling to bottom');
-    scrollToBottom();
+    //scrollToBottom();
   },
   { deep: true }
 );

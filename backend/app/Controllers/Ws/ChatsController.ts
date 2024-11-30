@@ -3,9 +3,18 @@ import Message from "App/Models/Message";
 const writingUsers: Map<number,  Message[]> = new Map();
 
 export default class ChatsController {
-  public async loadMessages({ params, socket }: WsContextContract) {
+  public async loadMessages({ params, socket }: WsContextContract, from:number, to:number) {
     console.log('Before loading messages')
-    const messages = await Message.query().where('channelId', params.id).preload('author').orderBy('createdAt', 'asc');
+   
+    const limit = to-from;
+    console.log(from, to, limit)
+    const messages = await Message.query()
+      .where('channelId', params.id)
+      .preload('author')
+      .orderBy('createdAt', 'desc')
+      .offset(from)
+      .limit(limit);
+     // console.log(messages)
     console.log('After loading messages')
     socket.emit('messagesLoaded', messages)
   }
