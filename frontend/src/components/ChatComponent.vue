@@ -46,20 +46,28 @@ onMounted(() => {
   const channelId = parseInt(route.params.id as string, 10);
   chatStore.connectToChannel(channelId);
 });
-
+//ukoncit lazy loading a scrollto bottom iba ked nova sprava
 defineProps<{
   messages: Message[];
 }>();
 const fromIndex = ref(0);
 const pageSize = 10; 
+let amount = 0;
 const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
   setTimeout(() => {
     const channelId = parseInt(route.params.id as string, 10);
+    if (amount > chatStore.messages.length){
+
+      done(true);
+      return;
+    }
 //  chatStore.connectToChannel(channelId);
     chatStore.loadMessages(fromIndex.value, fromIndex.value+pageSize, channelId);
     fromIndex.value += pageSize;
+    amount+=pageSize;
     // oldChatStore.lazyLoadMessages(parseInt(route.params.id as string, 10));
     done(false);
+
   }, 1500);
 };
 
