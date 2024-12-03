@@ -77,13 +77,7 @@
 
         <q-card-actions align="right">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn
-            flat
-            label="Add"
-            color="primary"
-           @click="addPrivateChat"
-           
-          />
+          <q-btn flat label="Add" color="primary" @click="addPrivateChat" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -105,13 +99,7 @@
 
         <q-card-actions align="right">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn
-            flat
-            label="Add"
-            color="primary"
-            
-           @click="addPublicChat"
-          />
+          <q-btn flat label="Add" color="primary" @click="addPublicChat" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -121,11 +109,9 @@
 <script setup lang="ts">
 import ChatRoom from 'components/ChatRoom.vue';
 import { onMounted, ref } from 'vue';
-import { useOldChatStore } from 'stores/store';
 import { useRouter } from 'vue-router';
 import { useChannelStore } from 'stores/channelStore';
 
-const chatStore = useOldChatStore();
 const channelStore = useChannelStore();
 const router = useRouter();
 
@@ -150,7 +136,7 @@ const openAddPublicChatDialog = () => {
 
 const addPrivateChat = () => {
   if (newChannelName.value.trim()) {
-    channelStore.addChannel(newChannelName.value, true); 
+    channelStore.addChannel(newChannelName.value, true);
     newChannelName.value = '';
     isAddPrivateChatDialogOpen.value = false;
   }
@@ -158,9 +144,9 @@ const addPrivateChat = () => {
 
 const addPublicChat = () => {
   if (newChannelName.value.trim()) {
-    channelStore.addChannel(newChannelName.value, false); 
-    newChannelName.value = ''; 
-    isAddPublicChatDialogOpen.value = false; 
+    channelStore.addChannel(newChannelName.value, false);
+    newChannelName.value = '';
+    isAddPublicChatDialogOpen.value = false;
   }
 };
 //

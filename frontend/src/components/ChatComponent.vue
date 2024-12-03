@@ -5,17 +5,22 @@
       class="chat-container q-pa-md col-12 justify-end bg-grey-2"
     >
       <q-infinite-scroll @load="onLoad" reverse>
-               <template v-slot:loading>
-                 <div class="row justify-center q-my-md">
-                   <q-spinner color="primary" name="dots" size="40px" />
-                 </div>
-                </template>
+        <template v-slot:loading>
+          <div class="row justify-center q-my-md">
+            <q-spinner color="primary" name="dots" size="40px" />
+          </div>
+        </template>
         <q-chat-message
           v-for="(message, index) in messages"
           :key="index"
           :name="message.author.username"
           :text="[message.content]"
           :sent="message.author.id === authStore.user?.id"
+          :class="{
+            highlighted: message.tags.some(
+              (tag) => tag.id === authStore.user?.id
+            ),
+          }"
         />
       </q-infinite-scroll>
     </div>
@@ -29,13 +34,11 @@ import { Message } from 'components/models';
 //import { useChatStore } from 'stores/chatStore';
 //import { useRoute } from 'vue-router';
 import { useAuthStore } from 'stores/authStore';
-//import { useOldChatStore } from 'stores/store';
 import { useChatStore } from 'stores/chatStore';
 import { useRoute } from 'vue-router';
 
 const chatContainer = ref<HTMLElement | null>(null);
 const chatStore = useChatStore();
-// const oldChatStore = useOldChatStore();
 const authStore = useAuthStore();
 // const route = useRoute();
 
@@ -51,23 +54,25 @@ defineProps<{
   messages: Message[];
 }>();
 const fromIndex = ref(0);
-const pageSize = 10; 
+const pageSize = 10;
 let amount = 0;
 const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
   setTimeout(() => {
     const channelId = parseInt(route.params.id as string, 10);
-    if (amount > chatStore.messages.length){
-
+    if (amount > chatStore.messages.length) {
       done(true);
       return;
     }
 
-    chatStore.loadMessages(fromIndex.value, fromIndex.value+pageSize, channelId);
+    chatStore.loadMessages(
+      fromIndex.value,
+      fromIndex.value + pageSize,
+      channelId
+    );
     fromIndex.value += pageSize;
-    amount+=pageSize;
-    
-    done(false);
+    amount += pageSize;
 
+    done(false);
   }, 1500);
 };
 
@@ -97,5 +102,10 @@ watch(
 .chat-container {
   display: flex;
   flex-direction: column;
+}
+
+.highlighted {
+  background-color: #ffeeba;
+  border-left: 5px solid #ffc107;
 }
 </style>

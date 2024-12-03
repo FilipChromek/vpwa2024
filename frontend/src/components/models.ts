@@ -21,7 +21,8 @@ export interface Room {
 
 export interface User {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   username: string;
   status: string;
 }

@@ -1,7 +1,6 @@
 <template>
   <p style="color: black; padding-left: 10px">
     <WritingComponent></WritingComponent>
-    
   </p>
   <div class="row items-center q-gutter-md">
     <q-input
@@ -38,7 +37,12 @@
           @click="tagPerson(person.name)"
         >
           <q-item-section>{{
-            person.name + ' (@' + person.username + ')'
+            person.firstName +
+            ' ' +
+            person.lastName +
+            ' (@' +
+            person.username +
+            ')'
           }}</q-item-section>
         </q-item>
       </q-list>
@@ -63,11 +67,11 @@
         </q-card-section>
 
         <q-list>
-          <q-item v-for="person in channelStore.channelUsers" :key="person.id">
+          <q-item v-for="person in filteredPeople" :key="person.id">
             <q-item-section
               >{{ person.firstName }} {{ person.lastName }} (@{{
                 person.username
-              }}) - {{person.status}}</q-item-section
+              }}) - {{ person.status }}</q-item-section
             >
           </q-item>
         </q-list>
@@ -91,13 +95,12 @@ const scrollToBottom = () => {
 
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useOldChatStore } from 'stores/store';
 // import { useRouter } from 'vue-router';
 import { useChatStore } from 'stores/chatStore';
 import { useChannelStore } from 'stores/channelStore';
 import WritingComponent from './WritingComponent.vue';
+import { User } from 'components/models';
 
-const oldChatStore = useOldChatStore();
 const chatStore = useChatStore();
 const channelStore = useChannelStore();
 const route = useRoute();
@@ -105,15 +108,15 @@ const route = useRoute();
 const newMessage = ref('');
 const isPeopleListOpen = ref(false);
 const isUserListOpen = ref(false);
-const filteredPeople = ref(oldChatStore.people);
+const filteredPeople = ref<User[]>([]);
 const highlightedIndex = ref(0);
 // const tagInProgress = ref(false);
-const openPeopleList = () =>{
+
+const openPeopleList = () => {
   const channelId = parseInt(route.params.id as string, 10);
   channelStore.listChannelUsers(channelId);
   isPeopleListOpen.value = true;
-
-}
+};
 const onInput = () => {
   const message = newMessage.value;
 
@@ -124,12 +127,18 @@ const onInput = () => {
   if (isUserListOpen.value) {
     const searchPerson = message.split('@').pop();
 
-    filteredPeople.value = oldChatStore.people.filter((person) =>
-      person.name.toLowerCase().includes(searchPerson!.toLowerCase())
+    filteredPeople.value = channelStore.channelUsers.filter(
+      (user) =>
+        `${user.firstName} ${user.lastName}`
+          .toLowerCase()
+          .includes(searchPerson!) ||
+        user.username.toLowerCase().includes(searchPerson!)
     );
 
     isUserListOpen.value = filteredPeople.value.length > 0;
   }
+
+  console.log('filteredPeople: ', filteredPeople.value);
 };
 
 const highlightNextPerson = () => {
@@ -149,8 +158,8 @@ const highlightPreviousPerson = () => {
 
 const handleEnterKey = () => {
   if (isUserListOpen.value && highlightedIndex.value >= 0) {
-    // const selectedPerson = filteredPeople.value[highlightedIndex.value];
-    // tagPerson(selectedPerson.name);
+    const selectedPerson = filteredPeople.value[highlightedIndex.value];
+    tagPerson(selectedPerson.username);
   } else {
     sendMessage();
   }
@@ -248,17 +257,16 @@ const sendMessage = () => {
   newMessage.value = '';
   isUserListOpen.value = false;
 };
-const writingMessage = ()=>{
+const writingMessage = () => {
   chatStore.writingMessage(newMessage.value);
-
-}
+};
 watch(
   () => newMessage.value,
   (newVal) => {
     if (!newVal.includes('@')) {
       isUserListOpen.value = false;
     }
-    writingMessage()
+    writingMessage();
   }
 );
 </script>
