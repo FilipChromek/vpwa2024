@@ -49,13 +49,16 @@ onMounted(() => {
   const channelId = parseInt(route.params.id as string, 10);
   chatStore.connectToChannel(channelId);
 });
+
 //ukoncit lazy loading a scrollto bottom iba ked nova sprava
 defineProps<{
   messages: Message[];
 }>();
+
 const fromIndex = ref(0);
-const pageSize = 10;
+const pageSize = 20;
 let amount = 0;
+
 const onLoad: QInfiniteScrollProps['onLoad'] = (_, done) => {
   setTimeout(() => {
     const channelId = parseInt(route.params.id as string, 10);
@@ -89,10 +92,12 @@ onMounted(() => {
 });
 
 watch(
-  () => chatStore.messages.length,
-  () => {
-    console.log('scrolling to bottom');
-    scrollToBottom();
+  () => chatStore.messages[chatStore.messages.length - 1],
+  (newMessage, oldMessage) => {
+    if (newMessage !== oldMessage) {
+      console.log('scrolling to bottom due to new message');
+      scrollToBottom();
+    }
   },
   { deep: true }
 );

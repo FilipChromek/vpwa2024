@@ -20,6 +20,7 @@ export const useChatStore = defineStore('chatStore', () => {
     messages.value.splice(0, messages.value.length);
     if (socket) {
       writingMessage('');
+      socket.off('messagesLoaded');
       socket.off('message');
       socket.off('writing');
       socket.disconnect();
