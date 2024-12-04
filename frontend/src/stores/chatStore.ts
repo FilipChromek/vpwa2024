@@ -25,6 +25,8 @@ export const useChatStore = defineStore('chatStore', () => {
       socket.off('messagesLoaded');
       socket.off('message');
       socket.off('writing');
+      // socket.off('inviteUser');
+      // socket.off('revokeUser');
       socket.off('channelUsers');
       socket.disconnect();
     }
@@ -96,11 +98,13 @@ export const useChatStore = defineStore('chatStore', () => {
       socket.emit('addMessage', content);
     }
   };
+
   const writingMessage = (input: string) => {
     if (socket) {
       socket.emit('writingMessage', input);
     }
   };
+
   const loadMessages = (from: number, to: number, channel_id: number) => {
     console.log('loadingmessageslazy', from, to);
     if (socket) {
@@ -124,6 +128,22 @@ export const useChatStore = defineStore('chatStore', () => {
     }
   };
 
+  const revokeUser = (channelId: number, username: string) => {
+    if (socket) {
+      socket.emit(
+        'revokeUser',
+        username,
+        (response: { success: boolean; message?: string }) => {
+          if (response.success) {
+            console.log(`${username} revoked successfully`);
+          } else {
+            console.error(`Failed to revoke ${username}:`, response.message);
+          }
+        }
+      );
+    }
+  };
+
   return {
     messages,
     channelUsers,
@@ -133,5 +153,6 @@ export const useChatStore = defineStore('chatStore', () => {
     writingMessages,
     loadMessages,
     inviteUser,
+    revokeUser,
   };
 });

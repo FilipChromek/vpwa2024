@@ -35,25 +35,8 @@ Ws.namespace("/channels/:id")
       console.log('Users in channel: ', usersInChannel);
       socket.emit('channelUsers', { channelId: params.id, users: usersInChannel });
       })
-  .on("inviteUser", async ({ socket, params }, username) => {
-    const user = await Database.from('users').where('username', username).first();
-    if (!user) {
-      socket.emit('inviteError', {message: 'User not found'});
-      return;
-    }
-
-    await Database.table('channel_users').insert({
-      channel_id: params.id,
-      user_id: user.id,
-    });
-
-    const updatedUsers = await Database.from('channel_users')
-      .innerJoin('users', 'channel_users.user_id', 'users.id')
-      .where('channel_users.channel_id', params.id)
-      .select('users.id', 'users.first_name', 'users.last_name', 'users.username', 'users.status');
-
-    socket.nsp.emit('channelUsers', {channelId: params.id, users: updatedUsers});
-  })
   .on("loadMessages", "ChatsController.loadMessages")
+  .on("inviteUser", "ChatsController.inviteUser")
+  .on("revokeUser", "ChatsController.revokeUser")
   .on("addMessage", "ChatsController.addMessage")
   .on("writingMessage", "ChatsController.writingMessage");

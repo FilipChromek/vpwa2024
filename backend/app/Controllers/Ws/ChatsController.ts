@@ -1,6 +1,7 @@
 import type { WsContextContract } from '@ioc:Ruby184/Socket.IO/WsContext'
 import Message from "App/Models/Message";
 import User from "App/Models/User";
+import Database from "@ioc:Adonis/Lucid/Database";
 const writingUsers: Map<number,  Message[]> = new Map();
 
 export default class ChatsController {
@@ -97,5 +98,45 @@ export default class ChatsController {
     if (!channelMessages) return false;
 
     return channelMessages.some((msg) => msg.createdBy === userId);
+  }
+
+  public async inviteUser({ params, socket }: WsContextContract, username: string) {
+    const user = await Database.from('users').where('username', username).first();
+    if (!user) {
+      // socket.emit('inviteError', {message: 'User not found'});
+      return;
+    }
+
+    await Database.table('channel_users').insert({
+      channel_id: params.id,
+      user_id: user.id,
+    });
+
+    const updatedUsers = await Database.from('channel_users')
+      .innerJoin('users', 'channel_users.user_id', 'users.id')
+      .where('channel_users.channel_id', params.id)
+      .select('users.id', 'users.first_name', 'users.last_name', 'users.username', 'users.status');
+
+    socket.nsp.emit('channelUsers', {channelId: params.id, users: updatedUsers});
+  }
+
+  public async revokeUser({ params, socket }: WsContextContract, username: string) {
+    const user = await Database.from('users').where('username', username).first();
+    if (!user) {
+      // socket.emit('revokeError', {message: 'User not found'});
+      return;
+    }
+
+    await Database.from('channel_users')
+      .where('channel_id', params.id)
+      .where('user_id', user.id)
+      .delete();
+
+    const updatedUsers = await Database.from('channel_users')
+      .innerJoin('users', 'channel_users.user_id', 'users.id')
+      .where('channel_users.channel_id', params.id)
+      .select('users.id', 'users.first_name', 'users.last_name', 'users.username', 'users.status');
+
+    socket.nsp.emit('channelUsers', {channelId: params.id, users: updatedUsers});
   }
 }

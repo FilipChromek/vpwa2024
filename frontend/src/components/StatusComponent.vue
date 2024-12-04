@@ -36,10 +36,10 @@ watch(selectedStatus, (newStatus, oldStatus) => {
     });
 
     if (newStatus !== undefined) {
-    authStore.changeStatus(newStatus);
-} else {
-    console.error("newStatus is undefined!");
-}
+      authStore.changeStatus(newStatus);
+    } else {
+      console.error('newStatus is undefined!');
+    }
   }
 });
 </script>

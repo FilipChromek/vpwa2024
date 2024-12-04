@@ -120,6 +120,7 @@ const openPeopleList = () => {
   filteredPeople.value = chatStore.channelUsers[channelId] || [];
   isPeopleListOpen.value = true;
 };
+
 const onInput = () => {
   const message = newMessage.value;
 
@@ -193,7 +194,6 @@ const checkForCommand = () => {
       if (!channelName) {
         return false;
       }
-      console.log('ISPRIVATE: ', isPrivate);
       channelStore.findOrCreateChannel(channelName, isPrivate);
       newMessage.value = '';
       return true;
@@ -214,7 +214,7 @@ const checkForCommand = () => {
       if (!username) {
         return false;
       }
-      channelStore.revokeUser(channelId, username);
+      chatStore.revokeUser(channelId, username);
       newMessage.value = '';
       return true;
     }
@@ -242,7 +242,7 @@ const checkForCommand = () => {
     }
 
     case '/list': {
-      channelStore.listChannelUsers(channelId);
+      openPeopleList();
       isPeopleListOpen.value = true;
       newMessage.value = '';
       return true;
