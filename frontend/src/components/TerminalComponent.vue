@@ -37,9 +37,9 @@
           @click="tagPerson(person.name)"
         >
           <q-item-section>{{
-            person.firstName +
+            person.first_name +
             ' ' +
-            person.lastName +
+            person.last_name +
             ' (@' +
             person.username +
             ')'
@@ -68,11 +68,14 @@
 
         <q-list>
           <q-item v-for="person in filteredPeople" :key="person.id">
-            <q-item-section
-              >{{ person.firstName }} {{ person.lastName }} (@{{
+            <q-item-section>
+              <q-badge :color="person.status === 'Online' ? 'green' : 'red'">
+                {{ person.status }}
+              </q-badge>
+              {{ person.first_name }} {{ person.last_name }} (@{{
                 person.username
-              }}) - {{ person.status }}</q-item-section
-            >
+              }})
+            </q-item-section>
           </q-item>
         </q-list>
 
@@ -114,7 +117,7 @@ const highlightedIndex = ref(0);
 
 const openPeopleList = () => {
   const channelId = parseInt(route.params.id as string, 10);
-  channelStore.listChannelUsers(channelId);
+  filteredPeople.value = chatStore.channelUsers[channelId] || [];
   isPeopleListOpen.value = true;
 };
 const onInput = () => {
@@ -127,13 +130,18 @@ const onInput = () => {
   if (isUserListOpen.value) {
     const searchPerson = message.split('@').pop();
 
-    filteredPeople.value = channelStore.channelUsers.filter(
+    const channelId = parseInt(route.params.id as string, 10);
+    const activeChannelUsers = chatStore.channelUsers[channelId] || [];
+
+    filteredPeople.value = activeChannelUsers.filter(
       (user) =>
         `${user.firstName} ${user.lastName}`
           .toLowerCase()
           .includes(searchPerson!) ||
         user.username.toLowerCase().includes(searchPerson!)
     );
+
+    console.log('filteredPeople: ', filteredPeople.value);
 
     isUserListOpen.value = filteredPeople.value.length > 0;
   }
@@ -196,7 +204,7 @@ const checkForCommand = () => {
       if (!username) {
         return false;
       }
-      channelStore.inviteUser(channelId, username);
+      chatStore.inviteUser(channelId, username);
       newMessage.value = '';
       return true;
     }

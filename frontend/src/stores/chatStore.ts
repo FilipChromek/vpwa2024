@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Message } from 'components/models';
+import { Message, User } from 'components/models';
 import { ref } from 'vue';
 import { Manager, Socket } from 'socket.io-client';
 import { useAuthStore } from 'src/stores/authStore';
@@ -7,6 +7,8 @@ import { useAuthStore } from 'src/stores/authStore';
 export const useChatStore = defineStore('chatStore', () => {
   const messages = ref<Message[]>([]);
   const writingMessages = ref<Message[]>([]);
+  const channelUsers = ref<Record<number, User[]>>({});
+
   const authStore = useAuthStore();
   let socket: Socket | null = null;
 
@@ -23,6 +25,7 @@ export const useChatStore = defineStore('chatStore', () => {
       socket.off('messagesLoaded');
       socket.off('message');
       socket.off('writing');
+      socket.off('channelUsers');
       socket.disconnect();
     }
 
@@ -47,6 +50,7 @@ export const useChatStore = defineStore('chatStore', () => {
     socket.on(
       'messagesLoaded',
       (loadedMessages: Message[], channel_id: number) => {
+        console.log('Channel users: ', channelUsers.value);
         console.log('Loaded messages: ', loadedMessages, channelId, channel_id);
         if (channel_id != channelId) {
           return;
@@ -54,6 +58,14 @@ export const useChatStore = defineStore('chatStore', () => {
         loadedMessages.forEach((sprava) => {
           messages.value.unshift(sprava);
         });
+      }
+    );
+
+    socket.on(
+      'channelUsers',
+      ({ channelId, users }: { channelId: number; users: User[] }) => {
+        channelUsers.value[channelId] = users;
+        console.log(`Users in channel ${channelId}:`, users);
       }
     );
 
@@ -96,12 +108,30 @@ export const useChatStore = defineStore('chatStore', () => {
     }
   };
 
+  const inviteUser = (channelId: number, username: string) => {
+    if (socket) {
+      socket.emit(
+        'inviteUser',
+        username,
+        (response: { success: boolean; message?: string }) => {
+          if (response.success) {
+            console.log(`${username} invited successfully`);
+          } else {
+            console.error(`Failed to invite ${username}:`, response.message);
+          }
+        }
+      );
+    }
+  };
+
   return {
     messages,
+    channelUsers,
     connectToChannel,
     addMessage,
     writingMessage,
     writingMessages,
     loadMessages,
+    inviteUser,
   };
 });

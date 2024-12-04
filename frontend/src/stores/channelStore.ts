@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia';
 import { api } from 'boot/axios';
 import { computed, ref } from 'vue';
-import { Channel, User } from 'components/models';
+import { Channel } from 'components/models';
 import { useAuthStore } from 'stores/authStore';
 export const useChannelStore = defineStore('channelStore', () => {
   const channels = ref<Channel[]>([]);
   const pendingChannels = ref([]);
-  const channelUsers = ref<User[]>([]);
   const authStore = useAuthStore();
 
   const loadChannels = async () => {
@@ -56,15 +55,6 @@ export const useChannelStore = defineStore('channelStore', () => {
     }
   };
 
-  const inviteUser = async (channelId: number, username: string) => {
-    try {
-      await api.post(`/api/channels/${channelId}/invite`, { username });
-      console.log(`${username} invited to channel ${channelId}`);
-    } catch (error) {
-      console.error('Failed to invite user:', error);
-    }
-  };
-
   const revokeUser = async (channelId: number, username: string) => {
     try {
       await api.post(`/api/channels/${channelId}/revoke`, { username });
@@ -74,14 +64,14 @@ export const useChannelStore = defineStore('channelStore', () => {
     }
   };
 
-  const listChannelUsers = async (channelId: number) => {
-    try {
-      const response = await api.get(`/api/channels/${channelId}/users`);
-      channelUsers.value = response.data; // Store the users in a reactive array
-    } catch (error) {
-      console.error('Failed to fetch channel users:', error);
-    }
-  };
+  // const listChannelUsers = async (channelId: number) => {
+  //   try {
+  //     const response = await api.get(`/api/channels/${channelId}/users`);
+  //     channelUsers.value = response.data;
+  //   } catch (error) {
+  //     console.error('Failed to fetch channel users:', error);
+  //   }
+  // };
 
   const findOrCreateChannel = async (name: string, isPrivate: boolean) => {
     try {
@@ -111,16 +101,13 @@ export const useChannelStore = defineStore('channelStore', () => {
 
   return {
     channels,
-    channelUsers,
     privateChannels,
     publicChannels,
     pendingChannels,
     loadChannels,
     addChannel,
     removeChannel,
-    inviteUser,
     revokeUser,
-    listChannelUsers,
     findOrCreateChannel,
   };
 });

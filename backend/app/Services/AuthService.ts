@@ -60,11 +60,11 @@ class AuthService {
         user.status = UserStatus.OFFLINE
 
       }
-      
+
       await user.save()
     }
 
-   
+
   }
 }
 
