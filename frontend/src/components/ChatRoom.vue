@@ -52,11 +52,6 @@ const { channel } = defineProps<{
 
 const chatMenu = ref(false);
 const channelStore = useChannelStore();
-
-// const leaveChatRoom = () => {
-//   chatMenu.value = !chatMenu.value;
-//   emit('remove', channel);
-// };
 </script>
 
 <style scoped></style>

@@ -32,7 +32,8 @@
       "@japa/preset-adonis/build/adonis-typings",
       "@adonisjs/auth",
       "@ruby184/adonis-socket.io",
-      "@adonisjs/lucid"
+      "@adonisjs/lucid",
+      "@adonisjs/bouncer"
     ]
   }
 }

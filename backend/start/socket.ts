@@ -10,7 +10,7 @@
 import Ws from '@ioc:Ruby184/Socket.IO/Ws'
 import Database from "@ioc:Adonis/Lucid/Database";
 
-Ws.namespace('/a')
+Ws.namespace('/auth')
   .connected(({ socket, auth }) => {
     console.log('new websocket connection: ', socket.id)
 
@@ -30,7 +30,7 @@ Ws.namespace('/a')
       socket.nsp.emit('userStatusUpdate', {userId: usedId, status: 'Offline'});
     }
   })
-  .on('changeStatus', 'UserStatusController.changeStatus');
+  .on("changeStatus", "UserStatusController.changeStatus");
 
 Ws.namespace("/channels/:id")
   //.middleware('auth') // check if user can join given channel
@@ -50,3 +50,9 @@ Ws.namespace("/channels/:id")
   .on("revokeUser", "ChatsController.revokeUser")
   .on("addMessage", "ChatsController.addMessage")
   .on("writingMessage", "ChatsController.writingMessage");
+
+Ws.namespace("/channels")
+  .on("loadChannels", "ChannelsController.loadChannels")
+  .on("addChannel", "ChannelsController.addChannel")
+  .on("removeChannel", "ChannelsController.removeChannel")
+  .on("findOrCreateChannel", "ChannelsController.findOrCreateChannel");

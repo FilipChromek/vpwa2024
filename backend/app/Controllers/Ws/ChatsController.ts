@@ -2,6 +2,7 @@ import type { WsContextContract } from '@ioc:Ruby184/Socket.IO/WsContext'
 import Message from "App/Models/Message";
 import User from "App/Models/User";
 import Database from "@ioc:Adonis/Lucid/Database";
+import Channel from "App/Models/Channel";
 const writingUsers: Map<number,  Message[]> = new Map();
 
 export default class ChatsController {
@@ -39,13 +40,13 @@ export default class ChatsController {
     await message.related('tags').attach(users.map(user => user.id));
 
     await message.load("tags");
-    // Load the author relationship from ORM model DONT FORGET ABOUT THIS
+    // Load the author relationship from ORM model DON'T FORGET ABOUT THIS
     await message.load("author");
 
     socket.nsp.emit('message', message);
     return message;
   }
-  // function to show real time writting message
+  // function to show real time writing message
   public async writingMessage({ params, socket, auth }: WsContextContract, content: string) {
     const channelId = parseInt(params.id);
     const message = new Message();
@@ -100,11 +101,21 @@ export default class ChatsController {
     return channelMessages.some((msg) => msg.createdBy === userId);
   }
 
-  public async inviteUser({ params, socket }: WsContextContract, username: string) {
+  public async inviteUser({ params, socket, bouncer }: WsContextContract, username: string) {
+    const channel = await Channel.find(params.id);
+    if (!channel) {
+      return socket.emit('error', { message: 'Channel not found.' });
+    }
+
+    try {
+      await bouncer.with('ChannelPolicy').authorize('isChannelAdmin', channel);
+    } catch (e) {
+      return socket.emit('error', { message: 'Unauthorized to invite users in this channel.' });
+    }
+
     const user = await Database.from('users').where('username', username).first();
     if (!user) {
-      // socket.emit('inviteError', {message: 'User not found'});
-      return;
+      return socket.emit('error', {message: 'User not found.'});
     }
 
     await Database.table('channel_users').insert({
@@ -120,11 +131,21 @@ export default class ChatsController {
     socket.nsp.emit('channelUsers', {channelId: params.id, users: updatedUsers});
   }
 
-  public async revokeUser({ params, socket }: WsContextContract, username: string) {
+  public async revokeUser({ params, socket, bouncer }: WsContextContract, username: string) {
+    const channel = await Channel.find(params.id);
+    if (!channel) {
+      return socket.emit('error', { message: 'Channel not found.' });
+    }
+
+    try {
+      await bouncer.with('ChannelPolicy').authorize('isChannelAdmin', channel);
+    } catch (e) {
+      return socket.emit('error', { message: 'Unauthorized to revoke users in this channel.' });
+    }
+
     const user = await Database.from('users').where('username', username).first();
     if (!user) {
-      // socket.emit('revokeError', {message: 'User not found'});
-      return;
+      return socket.emit('error', {message: 'User not found.'});
     }
 
     await Database.from('channel_users')

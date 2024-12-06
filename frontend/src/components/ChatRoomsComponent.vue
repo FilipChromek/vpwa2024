@@ -30,7 +30,7 @@
       >
         <chat-room
           :channel="channel"
-          @remove="chatStore.removeChatRoom(channel.id, router)"
+          @remove="chatStore.removeChannel(channel.id)"
         ></chat-room>
       </template>
 
@@ -53,7 +53,7 @@
       >
         <chat-room
           :channel="channel"
-          @remove="chatStore.removeChatRoom(channel.id, router)"
+          @remove="chatStore.removeChannel(channel.id)"
         ></chat-room>
       </template>
 
@@ -111,12 +111,14 @@ import ChatRoom from 'components/ChatRoom.vue';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useChannelStore } from 'stores/channelStore';
+import { useChatStore } from 'stores/chatStore';
 
 const channelStore = useChannelStore();
+const chatStore = useChatStore();
 const router = useRouter();
 
 onMounted(() => {
-  channelStore.loadChannels();
+  channelStore.connectToChannels();
 });
 
 const pendingRooms = []; // computed(() => chatStore.pendingRooms);

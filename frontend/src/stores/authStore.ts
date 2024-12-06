@@ -6,19 +6,20 @@ import { User } from 'components/models';
 import { Socket } from 'socket.io-client';
 import websocketService from 'src/services/websocketService';
 import { useChatStore } from 'stores/chatStore';
+import { Notify } from 'quasar';
 
 export const useAuthStore = defineStore('auth', () => {
   const router = useRouter();
   const isAuthenticated = ref(false);
   const user = ref<User | null>(null);
   const token = ref<string | null>(localStorage.getItem('token'));
-
   const chatStore = useChatStore();
+
   let socket: Socket | null = null;
 
   const connectSocket = () => {
     if (!socket) {
-      socket = websocketService.connect('/a', {
+      socket = websocketService.connect('/auth', {
         auth: { token: token.value },
       });
 
@@ -30,6 +31,16 @@ export const useAuthStore = defineStore('auth', () => {
 
       socket.on('disconnect', () => {
         console.log('Socket auth disconnected');
+      });
+
+      socket.on('error', (error: { message: string }) => {
+        console.error('Error received:', error);
+        Notify.create({
+          message: `Error: ${error.message}`,
+          color: 'negative',
+          timeout: 3000,
+          position: 'top-right',
+        });
       });
 
       socket.on(

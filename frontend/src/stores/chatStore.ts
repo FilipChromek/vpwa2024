@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { Socket } from 'socket.io-client';
 import websocketService from 'src/services/websocketService';
 import { useAuthStore } from 'stores/authStore';
+import { Notify } from 'quasar';
 
 export const useChatStore = defineStore('chatStore', () => {
   const messages = ref<Message[]>([]);
@@ -27,6 +28,7 @@ export const useChatStore = defineStore('chatStore', () => {
       socket.off('messagesLoaded');
       socket.off('message');
       socket.off('writing');
+      socket.off('error');
       // socket.off('inviteUser');
       // socket.off('revokeUser');
       socket.off('channelUsers');
@@ -47,6 +49,16 @@ export const useChatStore = defineStore('chatStore', () => {
 
     socket.on('connect_error', (error) => {
       console.error('Connection error:', error);
+    });
+
+    socket.on('error', (error: { message: string }) => {
+      console.error('Error received:', error);
+      Notify.create({
+        message: `Error: ${error.message}`,
+        color: 'negative',
+        timeout: 3000,
+        position: 'top-right',
+      });
     });
 
     socket.on(
@@ -115,33 +127,13 @@ export const useChatStore = defineStore('chatStore', () => {
 
   const inviteUser = (channelId: number, username: string) => {
     if (socket) {
-      socket.emit(
-        'inviteUser',
-        username,
-        (response: { success: boolean; message?: string }) => {
-          if (response.success) {
-            console.log(`${username} invited successfully`);
-          } else {
-            console.error(`Failed to invite ${username}:`, response.message);
-          }
-        }
-      );
+      socket.emit('inviteUser', username);
     }
   };
 
   const revokeUser = (channelId: number, username: string) => {
     if (socket) {
-      socket.emit(
-        'revokeUser',
-        username,
-        (response: { success: boolean; message?: string }) => {
-          if (response.success) {
-            console.log(`${username} revoked successfully`);
-          } else {
-            console.error(`Failed to revoke ${username}:`, response.message);
-          }
-        }
-      );
+      socket.emit('revokeUser', username);
     }
   };
 
