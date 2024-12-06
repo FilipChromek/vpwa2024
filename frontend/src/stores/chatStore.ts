@@ -1,22 +1,24 @@
 import { defineStore } from 'pinia';
 import { Message, User } from 'components/models';
 import { ref } from 'vue';
-import { Manager, Socket } from 'socket.io-client';
-import { useAuthStore } from 'src/stores/authStore';
+import { Socket } from 'socket.io-client';
+import websocketService from 'src/services/websocketService';
+import { useAuthStore } from 'stores/authStore';
 
 export const useChatStore = defineStore('chatStore', () => {
   const messages = ref<Message[]>([]);
   const writingMessages = ref<Message[]>([]);
   const channelUsers = ref<Record<number, User[]>>({});
 
-  const authStore = useAuthStore();
   let socket: Socket | null = null;
-
-  const manager = new Manager('http://localhost:3333', {
-    autoConnect: false,
-    transports: ['websocket'],
-    withCredentials: true,
-  });
+  const authStore = useAuthStore();
+  // let socket: Socket | null = null;
+  //
+  // const manager = new Manager('http://localhost:3333', {
+  //   autoConnect: false,
+  //   transports: ['websocket'],
+  //   withCredentials: true,
+  // });
 
   const connectToChannel = (channelId: number) => {
     messages.value.splice(0, messages.value.length);
@@ -28,16 +30,16 @@ export const useChatStore = defineStore('chatStore', () => {
       // socket.off('inviteUser');
       // socket.off('revokeUser');
       socket.off('channelUsers');
-      socket.disconnect();
+      websocketService.disconnect(`/channels/${channelId}`);
+      socket = null;
     }
 
     const token = localStorage.getItem('token');
-    // console.log('Token retrieved for WebSocket:', token);
-    socket = manager.socket(`/channels/${channelId}`, {
-      auth: {
-        token: token,
-      },
+    socket = websocketService.connect(`/channels/${channelId}`, {
+      auth: { token }, // Pass the token for authentication
     });
+
+    console.log('im in chat connect socket', socket);
 
     socket.on('connect', () => {
       console.log('Socket connected:', socket!.id);
@@ -46,8 +48,6 @@ export const useChatStore = defineStore('chatStore', () => {
     socket.on('connect_error', (error) => {
       console.error('Connection error:', error);
     });
-
-    socket.connect();
 
     socket.on(
       'messagesLoaded',
@@ -75,6 +75,7 @@ export const useChatStore = defineStore('chatStore', () => {
       console.log('New message (listening):', message);
       messages.value.push(message);
     });
+
     socket.on('writing', (messages: Message[]) => {
       console.log('Writing message: ', messages);
 

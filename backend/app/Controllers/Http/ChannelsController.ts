@@ -47,7 +47,7 @@ export default class ChannelsController {
   }
 
   public async removeUser({ auth, params, response }: HttpContextContract) {
-    await Database.from('channel_users').where('channel_id', params.id).where('user_id', auth.user?.id).delete()
+    await Database.from('channel_users').where('channel_id', params.id).where('user_id', auth.user!.id).delete()
     return response.ok({message: 'User removed from channel'})
   }
 

@@ -10,17 +10,27 @@
 import Ws from '@ioc:Ruby184/Socket.IO/Ws'
 import Database from "@ioc:Adonis/Lucid/Database";
 
-Ws.namespace('/')
-  .connected(({ socket }) => {
+Ws.namespace('/a')
+  .connected(({ socket, auth }) => {
     console.log('new websocket connection: ', socket.id)
+
+    const usedId = auth.user?.id;
+
+    if (usedId) {
+      console.log('User connected with ID: ', usedId);
+      socket.nsp.emit('userStatusUpdate', {userId: usedId, status: 'Online'});
+    }
   })
-  .disconnected(({ socket }, reason) => {
+  .disconnected(({ socket , auth}, reason) => {
     console.log('websocket disconnecting: ', socket.id, reason)
+    const usedId = auth.user?.id;
+
+    if (usedId) {
+      console.log('User disconnected with ID: ', usedId);
+      socket.nsp.emit('userStatusUpdate', {userId: usedId, status: 'Offline'});
+    }
   })
-  .on('hello', ({ socket }, msg: string) => {
-    console.log('websocket greeted: ', socket.id, msg)
-    return 'hi'
-  })
+  .on('changeStatus', 'UserStatusController.changeStatus');
 
 Ws.namespace("/channels/:id")
   //.middleware('auth') // check if user can join given channel
