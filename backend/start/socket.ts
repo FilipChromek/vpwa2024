@@ -46,13 +46,30 @@ Ws.namespace("/channels/:id")
       socket.emit('channelUsers', { channelId: params.id, users: usersInChannel });
       })
   .on("loadMessages", "ChatsController.loadMessages")
-  .on("inviteUser", "ChatsController.inviteUser")
-  .on("revokeUser", "ChatsController.revokeUser")
   .on("addMessage", "ChatsController.addMessage")
   .on("writingMessage", "ChatsController.writingMessage");
 
 Ws.namespace("/channels")
+  .connected(async ({ socket, auth }) => {
+    const userRoom = `user:${auth.user!.id}`;
+
+    // Join user-specific room
+    socket.join(userRoom);
+
+    // Add user ID to socket data for fetching online users
+    socket.data.userId = auth.user!.id;
+  })
+  .disconnected(async ({ socket, auth }) => {
+    const userRoom = `user:${auth.user!.id}`;
+
+    // Leave user-specific room
+    socket.leave(userRoom);
+  })
   .on("loadChannels", "ChannelsController.loadChannels")
   .on("addChannel", "ChannelsController.addChannel")
   .on("removeChannel", "ChannelsController.removeChannel")
-  .on("findOrCreateChannel", "ChannelsController.findOrCreateChannel");
+  .on("findOrCreateChannel", "ChannelsController.findOrCreateChannel")
+  .on("loadInvitations", "ChannelsController.loadInvitations")
+  .on("handleInvitation", "ChannelsController.handleInvitation")
+  .on("inviteUser", "ChannelsController.inviteUser")
+  .on("revokeUser", "ChannelsController.revokeUser");

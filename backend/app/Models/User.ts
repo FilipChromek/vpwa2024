@@ -3,6 +3,7 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, hasMany, HasMany, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Channel from "App/Models/Channel";
 import Message from "App/Models/Message";
+import ChannelInvitation from "App/Models/ChannelInvitation";
 
 export enum UserStatus {
   ONLINE = 'Online',
@@ -69,6 +70,11 @@ export default class User extends BaseModel {
     pivotTimestamps: true,
   })
   public taggedMessages: ManyToMany<typeof Message>
+
+  @hasMany(() => ChannelInvitation, {
+    foreignKey: 'invitedUserId',
+  })
+  public invitations: HasMany<typeof ChannelInvitation>
 
   @beforeSave()
   public static async hashPassword (user: User) {

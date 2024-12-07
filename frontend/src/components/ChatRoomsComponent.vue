@@ -1,15 +1,35 @@
 <template>
   <q-scroll-area class="fit">
     <q-list padding class="rounded-borders">
-      <template v-if="pendingRooms.length > 0">
+      <template v-if="channelStore.invitations.length > 0">
         <div class="flex flex-row justify-between q-px-md">
           <h3 class="text-subtitle2">Invitations</h3>
         </div>
-        <template v-for="channel in pendingRooms" :key="channel.id">
-          <chat-room
-            :channel="channel"
-            @remove="chatStore.removePendingChatRoom(channel.id, router)"
-          ></chat-room>
+        <template
+          v-for="invitation in channelStore.invitations"
+          :key="invitation.id"
+        >
+          <q-item>
+            <q-item-section>
+              <div>{{ invitation.name }}</div>
+            </q-item-section>
+            <q-item-section side>
+              <q-btn
+                dense
+                flat
+                label="Accept"
+                color="positive"
+                @click="channelStore.acceptInvitation(invitation.id)"
+              />
+              <q-btn
+                dense
+                flat
+                label="Decline"
+                color="negative"
+                @click="channelStore.declineInvitation(invitation.id)"
+              />
+            </q-item-section>
+          </q-item>
         </template>
       </template>
       <div class="flex flex-row justify-between q-px-md">
@@ -109,19 +129,13 @@
 <script setup lang="ts">
 import ChatRoom from 'components/ChatRoom.vue';
 import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { useChannelStore } from 'stores/channelStore';
-import { useChatStore } from 'stores/chatStore';
 
 const channelStore = useChannelStore();
-const chatStore = useChatStore();
-const router = useRouter();
 
 onMounted(() => {
   channelStore.connectToChannels();
 });
-
-const pendingRooms = []; // computed(() => chatStore.pendingRooms);
 
 const isAddPrivateChatDialogOpen = ref(false);
 const isAddPublicChatDialogOpen = ref(false);
@@ -151,22 +165,6 @@ const addPublicChat = () => {
     isAddPublicChatDialogOpen.value = false;
   }
 };
-//
-// const addPrivateChatRoom = () => {
-//   if (newPrivateChatRoomName.value.trim()) {
-//     chatStore.addChatRoom(newPrivateChatRoomName.value, 'private', router);
-//     newPrivateChatRoomName.value = '';
-//     isAddPrivateChatDialogOpen.value = false;
-//   }
-// };
-//
-// const addPublicChatRoom = () => {
-//   if (newPublicChatRoomName.value.trim()) {
-//     chatStore.addChatRoom(newPublicChatRoomName.value, 'public', router);
-//     newPublicChatRoomName.value = '';
-//     isAddPublicChatDialogOpen.value = false;
-//   }
-// };
 </script>
 
 <style scoped></style>

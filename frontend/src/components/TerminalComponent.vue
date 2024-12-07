@@ -103,6 +103,7 @@ import { useChatStore } from 'stores/chatStore';
 import { useChannelStore } from 'stores/channelStore';
 import WritingComponent from './WritingComponent.vue';
 import { User } from 'components/models';
+import { Notify } from 'quasar';
 
 const chatStore = useChatStore();
 const channelStore = useChannelStore();
@@ -189,9 +190,13 @@ const checkForCommand = () => {
 
   switch (command) {
     case '/join': {
-      const channelName = parts[1];
-      const isPrivate = parts[2] === 'private';
+      const channelName = parts.slice(1, -1).join(' ').trim();
+      const isPrivate = parts[parts.length - 1] === 'private';
       if (!channelName) {
+        Notify.create({
+          message: 'Please specify a channel name.',
+          color: 'negative',
+        });
         return false;
       }
       channelStore.findOrCreateChannel(channelName, isPrivate);
@@ -204,7 +209,7 @@ const checkForCommand = () => {
       if (!username) {
         return false;
       }
-      chatStore.inviteUser(channelId, username);
+      channelStore.inviteUser(channelId, username);
       newMessage.value = '';
       return true;
     }
@@ -214,7 +219,7 @@ const checkForCommand = () => {
       if (!username) {
         return false;
       }
-      chatStore.revokeUser(channelId, username);
+      channelStore.revokeUser(channelId, username);
       newMessage.value = '';
       return true;
     }

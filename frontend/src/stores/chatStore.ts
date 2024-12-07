@@ -60,8 +60,8 @@ export const useChatStore = defineStore('chatStore', () => {
         if (channel_id != channelId) {
           return;
         }
-        loadedMessages.forEach((sprava) => {
-          messages.value.unshift(sprava);
+        loadedMessages.forEach((message) => {
+          messages.value.unshift(message);
         });
       }
     );
@@ -70,7 +70,6 @@ export const useChatStore = defineStore('chatStore', () => {
       'channelUsers',
       ({ channelId, users }: { channelId: number; users: User[] }) => {
         channelUsers.value[channelId] = users;
-        console.log(`Users in channel ${channelId}:`, users);
       }
     );
 
@@ -83,8 +82,6 @@ export const useChatStore = defineStore('chatStore', () => {
       console.log('Writing message: ', messages);
 
       writingMessages.value.splice(0, writingMessages.value.length);
-
-      console.log('aaaaa');
 
       messages.forEach((message) => {
         if (message.createdBy != authStore.user?.id.toString()) {
@@ -110,21 +107,9 @@ export const useChatStore = defineStore('chatStore', () => {
   };
 
   const loadMessages = (from: number, to: number, channel_id: number) => {
-    console.log('loadingmessageslazy', from, to);
+    console.log('Lazy-loading messages:', from, to);
     if (socket) {
       socket.emit('loadMessages', from, to, channel_id);
-    }
-  };
-
-  const inviteUser = (channelId: number, username: string) => {
-    if (socket) {
-      socket.emit('inviteUser', username);
-    }
-  };
-
-  const revokeUser = (channelId: number, username: string) => {
-    if (socket) {
-      socket.emit('revokeUser', username);
     }
   };
 
@@ -135,8 +120,6 @@ export const useChatStore = defineStore('chatStore', () => {
     addMessage,
     writingMessage,
     writingMessages,
-    loadMessages,
-    inviteUser,
-    revokeUser,
+    loadMessages
   };
 });

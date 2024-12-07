@@ -10,7 +10,7 @@ class AuthService {
       firstName: data.firstName,
       lastName: data.lastName,
       username: data.username,
-      status: UserStatus.OFFLINE,
+      status: UserStatus.ONLINE,
     })
 
     const token = await auth.use('api').generate(user)
