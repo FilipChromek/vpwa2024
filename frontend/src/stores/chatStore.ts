@@ -13,13 +13,6 @@ export const useChatStore = defineStore('chatStore', () => {
 
   let socket: Socket | null = null;
   const authStore = useAuthStore();
-  // let socket: Socket | null = null;
-  //
-  // const manager = new Manager('http://localhost:3333', {
-  //   autoConnect: false,
-  //   transports: ['websocket'],
-  //   withCredentials: true,
-  // });
 
   const connectToChannel = (channelId: number) => {
     messages.value.splice(0, messages.value.length);
@@ -29,8 +22,6 @@ export const useChatStore = defineStore('chatStore', () => {
       socket.off('message');
       socket.off('writing');
       socket.off('error');
-      // socket.off('inviteUser');
-      // socket.off('revokeUser');
       socket.off('channelUsers');
       websocketService.disconnect(`/channels/${channelId}`);
       socket = null;

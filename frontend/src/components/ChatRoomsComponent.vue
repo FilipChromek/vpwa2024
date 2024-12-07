@@ -30,7 +30,7 @@
       >
         <chat-room
           :channel="channel"
-          @remove="chatStore.removeChannel(channel.id)"
+          @remove="channelStore.removeChannel(channel.id)"
         ></chat-room>
       </template>
 
@@ -53,7 +53,7 @@
       >
         <chat-room
           :channel="channel"
-          @remove="chatStore.removeChannel(channel.id)"
+          @remove="channelStore.removeChannel(channel.id)"
         ></chat-room>
       </template>
 
@@ -138,7 +138,7 @@ const openAddPublicChatDialog = () => {
 
 const addPrivateChat = () => {
   if (newChannelName.value.trim()) {
-    channelStore.addChannel(newChannelName.value, true);
+    channelStore.findOrCreateChannel(newChannelName.value, true);
     newChannelName.value = '';
     isAddPrivateChatDialogOpen.value = false;
   }
@@ -146,7 +146,7 @@ const addPrivateChat = () => {
 
 const addPublicChat = () => {
   if (newChannelName.value.trim()) {
-    channelStore.addChannel(newChannelName.value, false);
+    channelStore.findOrCreateChannel(newChannelName.value, false);
     newChannelName.value = '';
     isAddPublicChatDialogOpen.value = false;
   }

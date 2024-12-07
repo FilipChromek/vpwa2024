@@ -17,11 +17,11 @@ export default class AuthController {
 
   async login({ request, auth, response }: HttpContextContract) {
     const payload = await request.validate(LoginValidator)
-
     try {
       const result = await AuthService.login(payload, auth)
       return response.ok(result)
     } catch (error) {
+      console.log('Error logging in:', error)
       return response.badRequest({error: error.message})
     }
   }
