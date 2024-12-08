@@ -229,7 +229,7 @@ const checkForCommand = () => {
       if (!username) {
         return false;
       }
-      // channelStore.kickUser(channelId, username);
+      channelStore.kickUser(channelId, username);
       newMessage.value = '';
       return true;
     }

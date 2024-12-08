@@ -129,6 +129,28 @@ export const useChannelStore = defineStore('channelStore', () => {
           position: 'top-right',
         });
       });
+
+      socket.on('kickReceived', () => {
+        loadChannels();
+        Notify.create({
+          message: 'You have been kicked from a channel.',
+          color: 'warning',
+          timeout: 3000,
+          position: 'top-right',
+        });
+      });
+
+      socket.on(
+        'kickVoteRecorded',
+        ({ userId, currentVotes }) => {
+          Notify.create({
+            message: `Kick vote recorded for user ${userId}. ${currentVotes}/3 votes needed.`,
+            color: 'info',
+            timeout: 3000,
+            position: 'top-right',
+          });
+        }
+      );
     }
   };
 
@@ -153,6 +175,12 @@ export const useChannelStore = defineStore('channelStore', () => {
   const revokeUser = (channelId: number, username: string) => {
     if (socket) {
       socket.emit('revokeUser', { channelId, username });
+    }
+  };
+
+  const kickUser = (channelId: number, username: string) => {
+    if (socket) {
+      socket.emit('kickUser', { channelId, username });
     }
   };
 
@@ -207,6 +235,7 @@ export const useChannelStore = defineStore('channelStore', () => {
     loadInvitations,
     inviteUser,
     revokeUser,
+    kickUser,
     addChannel,
     removeChannel,
     findOrCreateChannel,

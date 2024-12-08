@@ -34,14 +34,25 @@ Ws.namespace('/auth')
 
 Ws.namespace("/channels/:id")
   //.middleware('auth') // check if user can join given channel
-  .connected(async ({ socket, params }) => {
+  .connected(async ({ auth, socket, params }) => {
+      const isBanned = await Database.from('banned_users')
+        .where('channel_id', params.id)
+        .where('user_id', auth.user!.id)
+        .first();
+
+      if (isBanned) {
+        socket.emit('error', { message: 'You are banned from this channel.' });
+        socket.disconnect(true);
+        return console.log(`User ${auth.user!.id} is banned from channel ${params.id}`);
+      }
+
       console.log(`User connected to channel: ${params.id} with socket ID: ${socket.id}`);
 
       const usersInChannel = await Database.from('channel_users')
         .innerJoin('users', 'channel_users.user_id', 'users.id')
         .where('channel_users.channel_id', params.id)
         .select('users.id', 'users.first_name', 'users.last_name', 'users.username', 'users.status');
-      // TODO this is weird, change it to users.firstName and users.lastName if possible
+
       console.log('Users in channel: ', usersInChannel);
       socket.emit('channelUsers', { channelId: params.id, users: usersInChannel });
       })
@@ -72,4 +83,5 @@ Ws.namespace("/channels")
   .on("loadInvitations", "ChannelsController.loadInvitations")
   .on("handleInvitation", "ChannelsController.handleInvitation")
   .on("inviteUser", "ChannelsController.inviteUser")
-  .on("revokeUser", "ChannelsController.revokeUser");
+  .on("revokeUser", "ChannelsController.revokeUser")
+  .on("kickUser", "ChannelsController.kickUser");
