@@ -34,6 +34,10 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/offline',
+    component: () => import('pages/OfflinePage.vue'),
+  },
+  {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },
