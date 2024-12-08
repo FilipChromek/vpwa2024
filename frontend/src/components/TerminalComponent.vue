@@ -188,8 +188,8 @@ const checkForCommand = () => {
 
   switch (command) {
     case '/join': {
-      const channelName = parts.slice(1, -1).join(' ').trim();
-      const isPrivate = parts[parts.length - 1] === 'private';
+      const channelName = parts[1];
+      const isPrivate = parts[2] === 'private';
       if (!channelName) {
         Notify.create({
           message: 'Please specify a channel name.',
