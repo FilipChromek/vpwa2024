@@ -98,7 +98,6 @@ const scrollToBottom = () => {
 
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-// import { useRouter } from 'vue-router';
 import { useChatStore } from 'stores/chatStore';
 import { useChannelStore } from 'stores/channelStore';
 import WritingComponent from './WritingComponent.vue';
@@ -114,7 +113,6 @@ const isPeopleListOpen = ref(false);
 const isUserListOpen = ref(false);
 const filteredPeople = ref<User[]>([]);
 const highlightedIndex = ref(0);
-// const tagInProgress = ref(false);
 
 const openPeopleList = () => {
   const channelId = parseInt(route.params.id as string, 10);

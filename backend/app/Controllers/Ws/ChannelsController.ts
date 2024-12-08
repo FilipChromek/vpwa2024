@@ -167,8 +167,16 @@ export default class ChannelsController {
 
   public async loadInvitations({ auth, socket }: WsContextContract) {
     try {
-      const invitations = await auth.user!.related('invitations').query().where('status', 'pending').orderBy('createdAt', 'desc')
-      socket.emit('loadedInvitations', invitations);
+      const invitations = await auth.user!.related('invitations').query().where('status', 'pending').orderBy('createdAt', 'desc').preload('channel', (channelQuery) => {
+        channelQuery.select('id', 'name');
+      });
+
+      const formatted = invitations.map((invitation) => ({
+        id: invitation.id,
+        name: invitation.channel?.name,
+      }));
+
+      socket.emit('loadedInvitations', formatted);
     } catch (error) {
       socket.emit('error', 'Failed to load invitations.')
     }

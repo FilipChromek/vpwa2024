@@ -19,7 +19,6 @@ class WebSocketService {
     if (!this.socketMap[namespace]) {
       this.socketMap[namespace] = this.manager.socket(namespace, options);
     } else if (options?.auth) {
-      // If the socket already exists, update the auth configuration
       this.socketMap[namespace].auth = options.auth;
     }
     return this.socketMap[namespace];

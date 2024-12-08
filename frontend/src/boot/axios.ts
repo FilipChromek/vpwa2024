@@ -18,13 +18,12 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response, // Pass successful responses through unchanged
+  (response) => response,
   (error) => {
     const router = useRouter();
 
-    // Check if error status is 401 (unauthorized)
     if (error.response?.status === 401) {
-      router.push('/auth/login'); // Redirect to login page
+      router.push('/auth/login');
     }
 
     return Promise.reject(error);

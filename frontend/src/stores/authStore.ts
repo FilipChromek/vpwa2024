@@ -51,7 +51,7 @@ export const useAuthStore = defineStore('auth', () => {
             const users = chatStore.channelUsers[channelId];
             const user = users.find((u) => u.id === data.userId);
             if (user) {
-              user.status = data.status; // Update the user's status
+              user.status = data.status;
               console.log(
                 `Updated status for user ${user.id} in channel ${channelId}`
               );
@@ -121,7 +121,7 @@ export const useAuthStore = defineStore('auth', () => {
       socket.disconnect();
       socket = null;
     }
-    router.push('/auth/login'); // Redirect to login
+    router.push('/auth/login');
   };
 
   const restoreUser = async () => {
@@ -139,19 +139,6 @@ export const useAuthStore = defineStore('auth', () => {
       }
     }
   };
-
-  // const initializeAuth = async () => {
-  //   const storedToken = localStorage.getItem('token');
-  //   if (storedToken) {
-  //     token.value = storedToken;
-  //     api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-  //     await restoreUser();
-  //   } else {
-  //     await logout();
-  //   }
-  // };
-  //
-  // initializeAuth();
 
   return {
     isAuthenticated,
