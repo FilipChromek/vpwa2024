@@ -8,12 +8,7 @@ declare const self: ServiceWorkerGlobalScope &
   typeof globalThis & { skipWaiting: () => void };
 
 import { clientsClaim } from 'workbox-core';
-import {
-  precacheAndRoute,
-  cleanupOutdatedCaches,
-  createHandlerBoundToURL,
-} from 'workbox-precaching';
-import { registerRoute, NavigationRoute } from 'workbox-routing';
+import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching';
 
 self.skipWaiting();
 clientsClaim();
@@ -34,8 +29,6 @@ cleanupOutdatedCaches();
 //   );
 // }
 
-console.log('RANDOM LOG');
-
 self.addEventListener('push', (event) => {
   event.waitUntil(
     (() => {
@@ -49,23 +42,3 @@ self.addEventListener('push', (event) => {
     })()
   );
 });
-
-// self.addEventListener('notificationclick', (event) => {
-//   event.notification.close();
-//
-//   const url = event.notification.data;
-//
-//   event.waitUntil(
-//     clients
-//       .matchAll({ type: 'window', includeUncontrolled: true })
-//       .then((clientList) => {
-//         const client = clientList.find((c) => c.url === url && 'focus' in c);
-//         if (client) {
-//           return client.focus();
-//         }
-//         if (clients.openWindow) {
-//           return clients.openWindow(url);
-//         }
-//       })
-//   );
-// });

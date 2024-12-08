@@ -3,7 +3,11 @@
 </template>
 
 <script setup lang="ts">
+import { useAppVisibility } from 'src/composables/useAppVisibility';
+
 defineOptions({
-  name: 'App'
+  name: 'App',
 });
+
+useAppVisibility();
 </script>
