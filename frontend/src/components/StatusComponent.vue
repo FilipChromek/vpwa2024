@@ -35,7 +35,7 @@ watch(selectedStatus, (newStatus, oldStatus) => {
       position: 'top-right',
     });
 
-    authStore.changeStatus(newStatus)
+    authStore.changeStatus(newStatus!);
   }
 });
 </script>

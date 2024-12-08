@@ -73,7 +73,7 @@ export const useChannelStore = defineStore('channelStore', () => {
         console.log('Channel deleted:', channelId);
         loadChannels();
         Notify.create({
-          message: 'Channel deleted successfully!',
+          message: 'Channel deleted.',
           color: 'positive',
           timeout: 3000,
           position: 'top-right',

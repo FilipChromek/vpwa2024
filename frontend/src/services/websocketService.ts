@@ -1,5 +1,4 @@
 import { Manager, Socket } from 'socket.io-client';
-import { Notify } from 'quasar';
 
 class WebSocketService {
   private manager: Manager;

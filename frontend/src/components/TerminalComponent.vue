@@ -196,6 +196,8 @@ const checkForCommand = () => {
         Notify.create({
           message: 'Please specify a channel name.',
           color: 'negative',
+          timeout: 3000,
+          position: 'top-right',
         });
         return false;
       }
