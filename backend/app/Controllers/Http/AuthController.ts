@@ -37,18 +37,14 @@ export default class AuthController {
   async changeStatus({ request, auth, response }: HttpContextContract) {
     try {
       console.log(request.only(['status']));
-      // Extract status from the request payload
       const { status } = request.only(['status'])
 
-      // Ensure status is provided
       if (!status) {
         return response.badRequest({ message: 'Status is required' })
       }
 
-      // Call AuthService to handle the status change logic
       await AuthService.changeStatus(auth, status)
 
-      // Respond with a success message
       return response.ok({ message: 'Status changed successfully' })
     } catch (error) {
       console.error('Error changing status:', error)

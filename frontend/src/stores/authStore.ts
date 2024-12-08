@@ -7,6 +7,7 @@ import { Socket } from 'socket.io-client';
 import websocketService from 'src/services/websocketService';
 import { useChatStore } from 'stores/chatStore';
 import { Notify } from 'quasar';
+import pushSubscriptionService from 'src/services/PushSubscriptionService';
 
 export const useAuthStore = defineStore('auth', () => {
   const router = useRouter();
@@ -95,6 +96,7 @@ export const useAuthStore = defineStore('auth', () => {
       isAuthenticated.value = true;
       localStorage.setItem('token', token.value!);
       api.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+      await pushSubscriptionService.subscribe();
       connectSocket();
       changeStatus('Online');
       router.push('/');
@@ -110,7 +112,7 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const logout = async () => {
-    // await api.post('/logout');
+    await pushSubscriptionService.unsubscribe();
     token.value = null;
     user.value = null;
     isAuthenticated.value = false;
@@ -132,6 +134,7 @@ export const useAuthStore = defineStore('auth', () => {
         console.log('User restoration response:', response.data);
         user.value = response.data;
         isAuthenticated.value = true;
+        await pushSubscriptionService.subscribe();
         connectSocket();
       } catch (error) {
         console.error('Session restoration failed:', error);

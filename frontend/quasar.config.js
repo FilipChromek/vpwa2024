@@ -64,18 +64,18 @@ module.exports = configure(function (/* ctx */) {
       // viteVuePluginOptions: {},
 
       vitePlugins: [
-        [
-          'vite-plugin-checker',
-          {
-            vueTsc: {
-              tsconfigPath: 'tsconfig.vue-tsc.json',
-            },
-            eslint: {
-              lintCommand: 'eslint "./**/*.{js,ts,mjs,cjs,vue}"',
-            },
-          },
-          { server: false },
-        ],
+        // [
+        //   'vite-plugin-checker',
+        //   {
+        //     vueTsc: {
+        //       tsconfigPath: 'tsconfig.vue-tsc.json',
+        //     },
+        //     eslint: {
+        //       lintCommand: 'eslint "./**/*.{js,ts,mjs,cjs,vue}"',
+        //     },
+        //   },
+        //   { server: false },
+        // ],
       ],
     },
 
@@ -142,7 +142,7 @@ module.exports = configure(function (/* ctx */) {
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
     pwa: {
-      workboxMode: 'generateSW', // or 'injectManifest'
+      workboxMode: 'injectManifest', // or 'injectManifest'
       injectPwaMetaTags: true,
       swFilename: 'sw.js',
       manifestFilename: 'manifest.json',

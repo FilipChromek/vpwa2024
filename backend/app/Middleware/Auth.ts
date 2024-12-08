@@ -80,7 +80,7 @@ export default class AuthMiddleware {
     next: () => Promise<void>,
     customGuards: (keyof GuardsList)[]
   ) {
-    const token = socket.handshake.auth.token; // Access token from the socket handshake
+    const token = socket.handshake.auth.token;
     console.log('Token received in wsHandle:', token);
     /**
      * Uses the user defined guards or the default guard mentioned in

@@ -64,16 +64,13 @@ Ws.namespace("/channels")
   .connected(async ({ socket, auth }) => {
     const userRoom = `user:${auth.user!.id}`;
 
-    // Join user-specific room
     socket.join(userRoom);
 
-    // Add user ID to socket data for fetching online users
     socket.data.userId = auth.user!.id;
   })
   .disconnected(async ({ socket, auth }) => {
     const userRoom = `user:${auth.user!.id}`;
 
-    // Leave user-specific room
     socket.leave(userRoom);
   })
   .on("loadChannels", "ChannelsController.loadChannels")

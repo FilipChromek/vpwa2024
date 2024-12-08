@@ -29,7 +29,7 @@ export const useChatStore = defineStore('chatStore', () => {
 
     const token = localStorage.getItem('token');
     socket = websocketService.connect(`/channels/${channelId}`, {
-      auth: { token }, // Pass the token for authentication
+      auth: { token },
     });
 
     console.log('im in chat connect socket', socket);

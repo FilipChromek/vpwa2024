@@ -45,3 +45,9 @@ Route.group(() => {
 
 Route.get('/api/current-user', 'AuthController.currentUser').middleware('auth')
 
+Route.group(() => {
+  Route.get('/vapid-public-key', 'PushSubscriptionController.getVapidPublicKey')
+  Route.post("/subscribe", "PushSubscriptionController.subscribe").middleware('auth');
+  Route.post("/unsubscribe", "PushSubscriptionController.unsubscribe").middleware('auth');
+}).prefix('push')
+

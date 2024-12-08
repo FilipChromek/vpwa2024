@@ -1,6 +1,8 @@
 import type { WsContextContract } from '@ioc:Ruby184/Socket.IO/WsContext'
 import Message from "App/Models/Message";
 import User from "App/Models/User";
+import PushSubscription from "App/Models/PushSubscription";
+import webPush from 'web-push';
 const writingUsers: Map<number,  Message[]> = new Map();
 
 export default class ChatsController {
@@ -33,14 +35,56 @@ export default class ChatsController {
     const tags = content.match(/@\w+/g) || [];
     const usernames = tags.map((tag) => tag.slice(1));
 
-    const users = await User.query().whereIn('username', usernames);
+    const taggedUsers = await User.query().whereIn('username', usernames);
 
-    await message.related('tags').attach(users.map(user => user.id));
+    await message.related('tags').attach(taggedUsers.map(user => user.id));
 
     await message.load("tags");
     await message.load("author");
 
     socket.nsp.emit('message', message);
+
+    const usersInChannel = await User.query()
+      .whereHas('channels', (channelQuery) => {
+        channelQuery.where('channels.id', channelId);
+      });
+
+    const userIdsToNotify = usersInChannel
+      .filter((user) => user.id !== auth.user!.id) // Exclude the author of the message
+      .map((user) => user.id);
+
+    const subscriptions = await PushSubscription.query().whereIn('userId', userIdsToNotify);
+
+    const vapidDetails = {
+      subject: 'mailto:your-email@example.com',
+      publicKey: process.env.VAPID_PUBLIC_KEY!,
+      privateKey: process.env.VAPID_PRIVATE_KEY!,
+    };
+
+    webPush.setVapidDetails(vapidDetails.subject, vapidDetails.publicKey, vapidDetails.privateKey);
+
+    for (const subscription of subscriptions) {
+      const pushSubscription = {
+        endpoint: subscription.endpoint,
+        keys: {
+          p256dh: subscription.p256dh,
+          auth: subscription.auth,
+        },
+      };
+
+      const payload = JSON.stringify({
+        title: 'New Message',
+        body: `${auth.user!.username}: ${content}`,
+        url: `/channels/${channelId}`,
+      });
+
+      try {
+        await webPush.sendNotification(pushSubscription, payload);
+      } catch (error) {
+        console.error('Failed to send push notification:', error);
+      }
+    }
+
     return message;
   }
   // function to show real time writing message
